@@ -36,14 +36,14 @@ public:
         return this->coefficients;
     }
 
-    int higher(const int &a, const int &b)
+    double higher(const double &a, const double &b)
     {
         if (a > b)
             return a;
         return b;
     }
 
-    int getCoefficientAt(int index)
+    double getCoefficientAt(int index)
     {
         if (coefficients.size() > index)
             return coefficients[index];
@@ -79,7 +79,7 @@ public:
         return Polynomial(difference);
     }
 
-    int sum(const int &a, const int &b)
+    double sum(const double &a, const double &b)
     {
         return a + b;
     }
