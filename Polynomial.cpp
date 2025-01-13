@@ -71,8 +71,11 @@ int main()
     Polynomial p2({1, 2, 3});
 
     Polynomial sum = p1.add(p2);
+    Polynomial difference = p1.substract(p2);
+    
     p1.print();
     sum.print();
+    difference.print();
 
     return 0;
 }
