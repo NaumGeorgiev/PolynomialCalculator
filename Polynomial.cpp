@@ -131,7 +131,7 @@ vector<vector<char>> getSplitCoefficients(vector<char> input)
     vector<char> coefficients;
     for (int i = 0; i <= input.size(); i++)
     {
-        if (input[i] == ',' || i==input.size())
+        if (input[i] == ',' || i == input.size())
         {
             splitCoefficients.push_back(coefficients);
             coefficients.clear();
@@ -142,17 +142,55 @@ vector<vector<char>> getSplitCoefficients(vector<char> input)
     return splitCoefficients;
 }
 
+vector<char> getNumerator(vector<char> coefficient)
+{
+    vector<char> numerator;
+    for (int i = 0; coefficient[i] != '\0' && coefficient[i] != '/'; i++)
+        numerator.push_back(coefficient[i]);
+    return numerator;
+}
+vector<char> getDenominator(vector<char> coefficient)
+{
+    int start = 0;
+    for (int i = 0; coefficient[i] != '\0'; i++)
+    {
+        start++;
+        if (coefficient[i] == '/')
+            break;
+    }
+
+    vector<char> denominator;
+    for (int i = start; coefficient[i] != '\0'; i++)
+        denominator.push_back(coefficient[i]);
+    return denominator;
+}
+
+pair<int, int> toFraction(vector<char> coefficient)
+{
+    pair<int, int> fraction;
+}
+
 void startLoop()
 {
     cout << "give polynomial" << endl;
-    vector<char> input = {'2', '.', '5', '4', '/', '4', '.', '3',',','3','.','1','4'};
+    vector<char> input = {'2', '.', '5', '4', '/', '4', '.', '3', ',', '3', '.', '1', '4'};
     vector<vector<char>> splitCoefficients = getSplitCoefficients(input);
-    for (int i=0; i<splitCoefficients.size(); i++){
-        for(int j=0; j<splitCoefficients[i].size(); j++){
+
+    for (int i = 0; i < splitCoefficients.size(); i++)
+    {
+        for (int j = 0; j < splitCoefficients[i].size(); j++)
+        {
             cout << splitCoefficients[i][j];
         }
         cout << endl;
     }
+
+    vector<char> denominator = getDenominator(splitCoefficients[0]);
+    for (int i = 0; i < denominator.size(); i++)
+        cout << denominator[i];
+    // vector<pair<int, int>> polynomial;
+    // for (int i = 0; i < splitCoefficients.size(); i++)
+    //     polynomial.push_back(toFraction(splitCoefficients[i]))
 
     /*
     vector<vector<char>> parts = {2.54/4.3}, {3.5}, {9}
