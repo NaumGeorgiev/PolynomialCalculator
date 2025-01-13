@@ -7,16 +7,16 @@ using namespace std;
 class Polynomial
 {
 private:
-    vector<int> coefficients;
+    vector<double> coefficients;
 
-    int getLastNecessaryElement(vector<int> &coefficients)
+    int getLastNecessaryElement(vector<double> &coefficients)
     {
         for (int i = coefficients.size() - 1; i > 0; i--)
             if (coefficients[i] != 0)
                 return i;
         return 0;
     }
-    void deleteUnnecessaryELements(vector<int> &coefficients)
+    void deleteUnnecessaryELements(vector<double> &coefficients)
     {
         int begin = getLastNecessaryElement(coefficients) + 1;
         coefficients.erase(coefficients.begin() + begin, coefficients.end());
@@ -24,14 +24,14 @@ private:
     }
 
 public:
-    Polynomial(const vector<int> &coefficients)
+    Polynomial(const vector<double> &coefficients)
     {
-        vector<int> temp = coefficients;
+        vector<double> temp = coefficients;
         deleteUnnecessaryELements(temp);
         this->coefficients = temp;
     }
 
-    vector<int> getCoefficients()
+    vector<double> getCoefficients()
     {
         return this->coefficients;
     }
@@ -52,12 +52,12 @@ public:
 
     Polynomial add(Polynomial &other)
     {
-        vector<int> otherCoefficients = other.getCoefficients();
+        vector<double> otherCoefficients = other.getCoefficients();
         int thisSize = coefficients.size();
         int otherSize = otherCoefficients.size();
 
         int size = higher(thisSize, otherSize);
-        vector<int> sum(size);
+        vector<double> sum(size);
 
         for (int i = 0; i < size; i++)
             sum[i] = getCoefficientAt(i) + other.getCoefficientAt(i);
@@ -67,12 +67,12 @@ public:
 
     Polynomial subtract(Polynomial &other)
     {
-        vector<int> otherCoefficients = other.getCoefficients();
+        vector<double> otherCoefficients = other.getCoefficients();
         int thisSize = coefficients.size();
         int otherSize = otherCoefficients.size();
 
         int size = higher(thisSize, otherSize);
-        vector<int> difference(size);
+        vector<double> difference(size);
 
         for (int i = 0; i < size; i++)
             difference[i] = getCoefficientAt(i) - other.getCoefficientAt(i);
@@ -86,17 +86,30 @@ public:
 
     Polynomial multiply(Polynomial &other)
     {
-        vector<int> otherCoefficients = other.getCoefficients();
+        vector<double> otherCoefficients = other.getCoefficients();
         int thisSize = coefficients.size();
         int otherSize = otherCoefficients.size();
-        
+
         int size = thisSize + otherSize - 1;
-        vector<int> product(size);
+        vector<double> product(size);
 
         for (int i = 0; i < thisSize; i++)
             for (int j = 0; j < otherSize; j++)
                 product[i + j] += getCoefficientAt(i) * other.getCoefficientAt(j);
         return Polynomial(product);
+    }
+
+     Polynomial divide(Polynomial &other)
+    {
+        vector<double> otherCoefficients = other.getCoefficients();
+        int thisSize = coefficients.size();
+        int otherSize = otherCoefficients.size();
+
+        int size = thisSize - otherSize + 1;
+        vector<double> quotient(size);
+
+        
+        return Polynomial(quotient);
     }
 
     void print()
