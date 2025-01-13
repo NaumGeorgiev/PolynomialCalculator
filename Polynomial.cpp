@@ -9,10 +9,26 @@ class Polynomial
 private:
     vector<int> coefficients;
 
+    int getLastNecessaryElement(vector<int> &coefficients)
+    {
+        for (int i = coefficients.size() - 1; i > 0; i--)
+            if (coefficients[i] != 0)
+                return i;
+        return 0;
+    }
+    void deleteUnnecessaryELements(vector<int> &coefficients)
+    {
+        int begin = getLastNecessaryElement(coefficients) + 1;
+        coefficients.erase(coefficients.begin() + begin, coefficients.end());
+
+    }
+
 public:
     Polynomial(const vector<int> &coefficients)
     {
-        this->coefficients = coefficients;
+        vector<int> temp = coefficients;
+        deleteUnnecessaryELements(temp);
+        this->coefficients = temp;
     }
 
     vector<int> getCoefficients()
@@ -73,7 +89,7 @@ public:
         vector<int> otherCoefficients = other.getCoefficients();
         int thisSize = coefficients.size();
         int otherSize = otherCoefficients.size();
-
+        
         int size = thisSize + otherSize - 1;
         vector<int> product(size);
 
@@ -102,15 +118,15 @@ public:
 };
 int main()
 {
-    Polynomial p1({1, 0, 0, 0});
-    Polynomial p2({1, 2, 3});
+    Polynomial p1({1, 2, 0, 0});
+    Polynomial p2({1, 2, 0});
     Polynomial sum = p1.add(p2);
     Polynomial difference = p1.subtract(p2);
     Polynomial product = p1.multiply(p2);
 
     p1.print();
     p2.print();
-    product.print();
+    difference.print();
 
     return 0;
 }
