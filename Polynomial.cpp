@@ -9,48 +9,11 @@ class Polynomial
 private:
     vector<pair<int, int>> coefficients;
 
-    int getLastNecessaryIndex(vector<pair<double, double>> &coefficients)
-    {
-        for (int i = coefficients.size() - 1; i > 0; i--)
-            if (coefficients[i].first != 0)
-                return i;
-        return 0;
-    }
-    void deleteUnnecessaryELements(vector<pair<double, double>> &coefficients)
-    {
-        int begin = getLastNecessaryIndex(coefficients) + 1;
-        coefficients.erase(coefficients.begin() + begin, coefficients.end());
-    }
-
-    int decimalDigitsCount(double a)
-    {
-        int count = 0;
-        while (true)
-        {
-            if (a > static_cast<int>(a))
-            {
-                a *= 10;
-                count++;
-            }
-        }
-    }
-
-    void removeDoubles(vector<pair<double, double>> &coefficients)
-    {
-        for (int i = 0; i < coefficients.size(); i++)
-        {
-            coefficients[i].first *= 10;
-            coefficients[i].second *= 10;
-        }
-    }
-
 public:
-    // Polynomial(const vector<pair<double, double>> &coefficients)
-    // {
-    //     vector<pair<double, double>> temp = coefficients;
-    //     deleteUnnecessaryELements(temp);
-    //     this->coefficients = temp;
-    // }
+    Polynomial(const vector<pair<int, int>> &coefficients)
+    {
+        this->coefficients = coefficients;
+    }
 
     // vector<pair<int, int>> getCoefficients()
     // {
@@ -162,37 +125,50 @@ int decimalDigitsCount(vector<char> number)
     return count;
 }
 
+vector<vector<char>> getSplitCoefficients(vector<char> input)
+{
+    vector<vector<char>> splitCoefficients;
+    vector<char> coefficients;
+    for (int i = 0; i <= input.size(); i++)
+    {
+        if (input[i] == ',' || i==input.size())
+        {
+            splitCoefficients.push_back(coefficients);
+            coefficients.clear();
+        }
+        else
+            coefficients.push_back(input[i]);
+    }
+    return splitCoefficients;
+}
+
+void startLoop()
+{
+    cout << "give polynomial" << endl;
+    vector<char> input = {'2', '.', '5', '4', '/', '4', '.', '3',',','3','.','1','4'};
+    vector<vector<char>> splitCoefficients = getSplitCoefficients(input);
+    for (int i=0; i<splitCoefficients.size(); i++){
+        for(int j=0; j<splitCoefficients[i].size(); j++){
+            cout << splitCoefficients[i][j];
+        }
+        cout << endl;
+    }
+
+    /*
+    vector<vector<char>> parts = {2.54/4.3}, {3.5}, {9}
+    for each
+    vector<char> numerator = 2.54
+    numeratorDecimalDigitsCount = 2
+
+    vector<char> denominator = 4.3
+    denominatorDecimalDigitsCount = 1
+
+    pair<int, int> toFraction(vector<char> numerator, numeratorDigitsCOunt, ...)
+     */
+}
+
 int main()
 {
-    int a = 2.540*100;
-    cout << a;
-    // vector<char> myVec;
-    // char inputChar;
-
-    // cout << "Enter characters (type '0' to stop):" << std::endl;
-
-    // // Read characters until '0' is entered
-    // while (true)
-    // {
-    //     std::cin >> inputChar;
-    //     if (inputChar == '\n')
-    //     {
-    //         break; // Stop when the user enters '0'
-    //     }
-    //     myVec.push_back(inputChar);
-    //     cout << myVec[0];
-        // Polynomial p1({1, 0, 2, 3});
-        // Polynomial p2({5, 1});
-        // Polynomial sum = p1.add(p2);
-        // Polynomial difference = p1.subtract(p2);
-        // Polynomial product = p1.multiply(p2);
-        // 2.34, 3.56/45, 98
-        // p1.print();
-        // p2.print();
-        // difference.print();
-        // vector<char> number= {'1', '2', '.', '4', '4'};
-        // cout << decimalDigitsCount(number);
-        // cout << decimalDigitsCount(a);
-
-        return 0;
-    }
+    startLoop();
+    return 0;
+}
