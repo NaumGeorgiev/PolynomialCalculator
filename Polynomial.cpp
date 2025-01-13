@@ -20,13 +20,13 @@ public:
         return this->coefficients;
     }
 
-    int smaller(int a, int b)
+    int smaller(const int &a, const int &b)
     {
         if (a < b)
             return a;
         return b;
     }
-    vector<int> add(Polynomial other)
+    vector<int> add(Polynomial &other)
     {
         vector<int> sum;
         int size = smaller(coefficients.size(), other.getCoefficients().size());
@@ -37,8 +37,9 @@ public:
         return sum;
     }
 
-    vector<int> substract(Polynomial other)
+    vector<int> substract(Polynomial &other)
     {
+        other.getCoefficients()[2] = 1;
         vector<int> difference;
         int size = smaller(coefficients.size(), other.getCoefficients().size());
         difference.resize(size);
@@ -72,7 +73,7 @@ int main()
 
     Polynomial sum = p1.add(p2);
     Polynomial difference = p1.substract(p2);
-    
+
     p1.print();
     sum.print();
     difference.print();
