@@ -63,15 +63,25 @@ public:
         return Polynomial(difference);
     }
 
-    // int sum(const int &a, const int &b){
-    //     return a + b;
-    // }
+    int sum(const int &a, const int &b)
+    {
+        return a + b;
+    }
 
-    // vector<int> multiply(Polynomial &other){
-    //     vector<int> product;
-    //     int size = sum(coefficients.size(), other.getCoefficients().size());
+    Polynomial multiply(Polynomial &other)
+    {
+        vector<int> otherCoefficients = other.getCoefficients();
+        int thisSize = coefficients.size();
+        int otherSize = otherCoefficients.size();
 
-    // }
+        int size = thisSize + otherSize - 1;
+        vector<int> product(size);
+
+        for (int i = 0; i < thisSize; i++)
+            for (int j = 0; j < otherSize; j++)
+                product[i + j] += getCoefficientAt(i) * other.getCoefficientAt(j);
+        return Polynomial(product);
+    }
 
     void print()
     {
@@ -92,18 +102,15 @@ public:
 };
 int main()
 {
-    Polynomial p1({1, 2, 3, 4});
+    Polynomial p1({1, 0, 0, 0});
     Polynomial p2({1, 2, 3});
     Polynomial sum = p1.add(p2);
     Polynomial difference = p1.subtract(p2);
+    Polynomial product = p1.multiply(p2);
 
-    sum.print();
-    difference.print();
-    // Polynomial difference = p1.subtract(p2);
-
-    // p1.print();
-    // sum.print();
-    // difference.print();
+    p1.print();
+    p2.print();
+    product.print();
 
     return 0;
 }
