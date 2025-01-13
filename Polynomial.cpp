@@ -113,18 +113,6 @@ public:
     // }
 };
 
-int decimalDigitsCount(vector<char> number)
-{
-    int startingIndex = 1;
-    while (number[startingIndex - 1] != '\0' && number[startingIndex - 1] != '.')
-        startingIndex++;
-    int count = 0;
-    for (int i = startingIndex; number[i] != '\0'; i++)
-        count++;
-
-    return count;
-}
-
 vector<vector<char>> getSplitCoefficients(vector<char> input)
 {
     vector<vector<char>> splitCoefficients;
@@ -165,10 +153,40 @@ vector<char> getDenominator(vector<char> coefficient)
     return denominator;
 }
 
-pair<int, int> toFraction(vector<char> coefficient)
+int getDecimalDigitCount(vector<char> number)
 {
-    pair<int, int> fraction;
+    int startingIndex = 1;
+    while (number[startingIndex - 1] != '\0' && number[startingIndex - 1] != '.')
+        startingIndex++;
+    int count = 0;
+    for (int i = startingIndex; number[i] != '\0'; i++)
+        count++;
+
+    return count;
 }
+
+int smaller(const int &a, const int &b){
+    if(a < b)
+        return a;
+    return b;
+}
+
+// void removeDecimalPoint(vector<char> &numerator, vector<char> &denominator){
+//     int numeratorDecimalDigitCount = getDecimalDigitCount(numerator);
+//     int denominatorDecimalDigitCount = getDecimalDigitCount(denominator);
+//     int smaller
+    
+// }
+
+// pair<int, int> toFraction(vector<char> coefficient)
+// {
+//     pair<int, int> fraction;
+//     vector<char> numerator = getNumerator(coefficient);
+//     vector<char> denominator = getDenominator(coefficient);
+
+
+    
+// }
 
 void startLoop()
 {
@@ -184,7 +202,7 @@ void startLoop()
         }
         cout << endl;
     }
-
+    smaller(3, 2);
     vector<char> denominator = getDenominator(splitCoefficients[0]);
     for (int i = 0; i < denominator.size(); i++)
         cout << denominator[i];
