@@ -212,10 +212,26 @@ pair<int, int> add(pair<int, int> a, pair<int, int> b)
 pair<int, int> subtract(pair<int, int> a, pair<int, int> b)
 {
     rewriteWithCommonDenominators(a, b);
-    pair<int, int> sum;
-    sum.first = a.first - b.first;
-    sum.second = a.second;
-    return sum;
+    pair<int, int> difference;
+    difference.first = a.first - b.first;
+    difference.second = a.second;
+    return difference;
+}
+
+pair<int, int> multiply(pair<int, int> a, pair<int, int> b)
+{
+    pair<int, int> product;
+    product.first=a.first*b.first;
+    product.second=a.second*b.second;
+    return product;
+}
+
+pair<int, int> divide(pair<int, int> a, pair<int, int> b)
+{
+    pair<int, int> quotient;
+    quotient.first=a.first*b.second;
+    quotient.second=a.second*b.first;
+    return quotient;
 }
 
 int main()
@@ -225,6 +241,12 @@ int main()
     
     pair<int, int> sum = add(a, b);
     pair<int, int> diff = subtract(a, b);
+    pair<int, int> product = multiply(a, b);
+    pair<int, int> quotient = divide(a, b);
+
+    cout << product.first << '/' << product.second << endl;    
+    cout << quotient.first << '/' << quotient.second << endl;   
+
     cout << diff.first << '/' << diff.second << endl;    
     cout << sum.first << '/' << sum.second << endl;
     startLoop();
