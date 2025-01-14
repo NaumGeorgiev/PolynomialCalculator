@@ -120,7 +120,7 @@ void rewriteWithCommonDenominators(pair<int, int> &a, pair<int, int> &b)
     b.second *= multiplicatorB;
 }
 
-pair<int, int> add(pair<int, int> a, pair<int, int> b)
+pair<int, int> addFractions(pair<int, int> a, pair<int, int> b)
 {
     rewriteWithCommonDenominators(a, b);
     pair<int, int> sum;
@@ -129,7 +129,7 @@ pair<int, int> add(pair<int, int> a, pair<int, int> b)
     return sum;
 }
 
-pair<int, int> subtract(pair<int, int> a, pair<int, int> b)
+pair<int, int> subtractFractions(pair<int, int> a, pair<int, int> b)
 {
     rewriteWithCommonDenominators(a, b);
     pair<int, int> difference;
@@ -138,7 +138,7 @@ pair<int, int> subtract(pair<int, int> a, pair<int, int> b)
     return difference;
 }
 
-pair<int, int> multiply(pair<int, int> a, pair<int, int> b)
+pair<int, int> multiplyFractions(pair<int, int> a, pair<int, int> b)
 {
     pair<int, int> product;
     product.first = a.first * b.first;
@@ -146,7 +146,7 @@ pair<int, int> multiply(pair<int, int> a, pair<int, int> b)
     return product;
 }
 
-pair<int, int> divide(pair<int, int> a, pair<int, int> b)
+pair<int, int> divideFractions(pair<int, int> a, pair<int, int> b)
 {
     pair<int, int> quotient;
     quotient.first = a.first * b.second;
@@ -175,6 +175,22 @@ public:
         if (index < coefficients.size())
             return coefficients[index];
         return pair{0, 0};
+    }
+
+    Polynomial add(Polynomial &other)
+    {
+        int thisSize = coefficients.size();
+        int otherSize = other.coefficients.size();
+        int higherSize = max(thisSize, otherSize);
+
+        vector<pair<int, int>> summedCoefficients;
+        for (int i = 0; i < higherSize; i++)
+        {
+            pair<int, int> thisValue = getCoefficientAt(i);
+            pair<int, int> otherValue = other.getCoefficientAt(i);
+            summedCoefficients.push_back(addFractions(thisValue, otherValue));
+        }
+        return Polynomial(summedCoefficients);
     }
 
     void print()
@@ -208,10 +224,23 @@ public:
 //     fraction.second /= gcd;
 // }
 
+vector<char> polynomialInput()
+{
+    vector<char> input;
+    char symbol;
+    cin >> symbol;
+    while (symbol != 's')
+    {
+        input.push_back(symbol);
+        cin >> symbol;
+    }
+    return input;
+}
+
 void startLoop()
 {
     cout << "give polynomial" << endl;
-    vector<char> firstInput = {'3', '.', '1', '4', '/', ',', '1', '/', '3', '4'};
+    vector<char> firstInput = polynomialInput();
     vector<pair<int, int>> coefficients = parseCoefficients(firstInput);
     Polynomial firstPolynomial(coefficients);
     firstPolynomial.print();
@@ -228,16 +257,16 @@ int main()
     pair<int, int> a = {1, 2};
     pair<int, int> b = {1, 3};
 
-    pair<int, int> sum = add(a, b);
-    pair<int, int> diff = subtract(a, b);
-    pair<int, int> product = multiply(a, b);
-    pair<int, int> quotient = divide(a, b);
+    // pair<int, int> sum = add(a, b);
+    // pair<int, int> diff = subtract(a, b);
+    // pair<int, int> product = multiply(a, b);
+    // pair<int, int> quotient = divide(a, b);
 
-    cout << product.first << '/' << product.second << endl;
-    cout << quotient.first << '/' << quotient.second << endl;
+    // cout << product.first << '/' << product.second << endl;
+    // cout << quotient.first << '/' << quotient.second << endl;
 
-    cout << diff.first << '/' << diff.second << endl;
-    cout << sum.first << '/' << sum.second << endl;
+    // cout << diff.first << '/' << diff.second << endl;
+    // cout << sum.first << '/' << sum.second << endl;
     startLoop();
 
     return 0;
