@@ -5,53 +5,6 @@
 
 using namespace std;
 
-class Polynomial
-{
-private:
-    vector<pair<int, int>> coefficients;
-
-public:
-    Polynomial(const vector<pair<int, int>> &coefficients)
-    {
-        this->coefficients = coefficients;
-    }
-
-    const vector<pair<int, int>> &getCoefficients()
-    {
-        return coefficients;
-    }
-
-    pair<int, int> getCoefficientAt(int index)
-    {
-        if (index < coefficients.size())
-            return coefficients[index];
-        return pair{0, 0};
-    }
-
-    void print()
-    {
-
-        for (int i = 0; i < coefficients.size(); i++)
-        {
-            int numerator = coefficients[i].first;
-            int denominator = coefficients[i].second;
-            if (denominator == 1)
-                cout << numerator;
-            else
-                cout << '(' << numerator << '/' << denominator << ')';
-            if (i != 0)
-            {
-                cout << 'x';
-                if (i != 1)
-                    cout << '^' << i;
-            }
-            if (i != coefficients.size() - 1)
-                cout << " + ";
-        }
-        cout << endl;
-    }
-};
-
 vector<vector<char>> splitByComma(const vector<char> &input)
 {
     vector<vector<char>> splitCoefficients;
@@ -135,6 +88,53 @@ vector<pair<int, int>> parseCoefficients(const vector<char> &input)
         convertedCoefficients.push_back(parseCoefficient(splitCoefficients[i]));
     return convertedCoefficients;
 }
+
+class Polynomial
+{
+private:
+    vector<pair<int, int>> coefficients;
+
+public:
+    Polynomial(const vector<pair<int, int>> &coefficients)
+    {
+        this->coefficients = coefficients;
+    }
+
+    const vector<pair<int, int>> &getCoefficients()
+    {
+        return coefficients;
+    }
+
+    pair<int, int> getCoefficientAt(int index)
+    {
+        if (index < coefficients.size())
+            return coefficients[index];
+        return pair{0, 0};
+    }
+
+    void print()
+    {
+
+        for (int i = 0; i < coefficients.size(); i++)
+        {
+            int numerator = coefficients[i].first;
+            int denominator = coefficients[i].second;
+            if (denominator == 1)
+                cout << numerator;
+            else
+                cout << '(' << numerator << '/' << denominator << ')';
+            if (i != 0)
+            {
+                cout << 'x';
+                if (i != 1)
+                    cout << '^' << i;
+            }
+            if (i != coefficients.size() - 1)
+                cout << " + ";
+        }
+        cout << endl;
+    }
+};
 
 void startLoop()
 {
