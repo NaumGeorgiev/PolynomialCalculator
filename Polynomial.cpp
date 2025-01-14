@@ -16,12 +16,12 @@ public:
         this->coefficients = coefficients;
     }
 
-    vector<pair<int, int>> getCoefficients()
+    const vector<pair<int, int>> &getCoefficients()
     {
         return coefficients;
     }
 
-    pair<int, int> getValueOn(int index)
+    pair<int, int> getValueOn(int index) // TODO: getCoefficientAt
     {
         if (index < coefficients.size())
             return coefficients[index];
@@ -52,7 +52,7 @@ public:
     }
 };
 
-vector<vector<char>> getSplitCoefficients(const vector<char> &input)
+vector<vector<char>> splitByComma(const vector<char> &input)
 {
     vector<vector<char>> splitCoefficients;
     vector<char> coefficients;
@@ -103,31 +103,16 @@ int getDecimalDigitCount(const vector<char> &number)
     return number.size() - startingIndex;
 }
 
-void removeDecimalPoint(vector<char> &number)
-{
-    vector<char> newNumber;
-    for (int i = 0; i < number.size(); i++)
-        if (number[i] != '.')
-            newNumber.push_back(number[i]);
-    number = newNumber;
-}
-
-void shiftDecimalPoint(vector<char> &number, const int &n, const int &positionsLeft)
-{
-    removeDecimalPoint(number);
-    for (int i = positionsLeft; i < n; i++)
-        number.push_back('0');
-}
-
 int toInt(const vector<char> &number)
 {
     int result = 0;
     for (int i = 0; i < number.size(); i++)
-        result = result * 10 + (number[i] - '0');
+        if (number[i] != '.')
+            result = result * 10 + (number[i] - '0');
     return result;
 }
 
-pair<int, int> toFraction(const vector<char> &coefficient)
+pair<int, int> parseCoefficient(const vector<char> &coefficient)
 {
     vector<char> numerator = getNumerator(coefficient);
     vector<char> denominator = getDenominator(coefficient);
@@ -135,30 +120,27 @@ pair<int, int> toFraction(const vector<char> &coefficient)
     const int denominatorDecimalDigitCount = getDecimalDigitCount(denominator);
     const int higher = max(numeratorDecimalDigitCount, denominatorDecimalDigitCount);
 
-    shiftDecimalPoint(numerator, higher, numeratorDecimalDigitCount);
-    shiftDecimalPoint(denominator, higher, denominatorDecimalDigitCount);
-
     const int convertedNumerator = toInt(numerator);
     const int convertedDenominator = toInt(denominator);
 
     return pair{convertedNumerator, convertedDenominator};
 }
 
-vector<pair<int, int>> getConvertedCoefficients(const vector<char> &input)
+vector<pair<int, int>> parseCoefficients(const vector<char> &input)
 {
-    const vector<vector<char>> splitCoefficients = getSplitCoefficients(input);
+    const vector<vector<char>> splitCoefficients = splitByComma(input);
 
     vector<pair<int, int>> convertedCoefficients;
     for (int i = 0; i < splitCoefficients.size(); i++)
-        convertedCoefficients.push_back(toFraction(splitCoefficients[i]));
+        convertedCoefficients.push_back(parseCoefficient(splitCoefficients[i]));
     return convertedCoefficients;
 }
 
 void startLoop()
 {
     cout << "give polynomial" << endl;
-    vector<char> firstInput = {'3', '.', '1', '4', '/', ',', '1', '/', '3'};
-    vector<pair<int, int>> coefficients = getConvertedCoefficients(firstInput);
+    vector<char> firstInput = {'3', '.', '1', '4', '/', ',', '1', '/', '3', '4'};
+    vector<pair<int, int>> coefficients = parseCoefficients(firstInput);
     Polynomial firstPolynomial(coefficients);
     firstPolynomial.print();
 
