@@ -120,12 +120,20 @@ void rewriteWithCommonDenominators(pair<int, int> &a, pair<int, int> &b)
     b.second *= multiplicatorB;
 }
 
+void simplify(pair<int, int> &fraction)
+{
+    int gcd = findGCD(fraction.first, fraction.second);
+    fraction.first /= gcd;
+    fraction.second /= gcd;
+}
+
 pair<int, int> addFractions(pair<int, int> a, pair<int, int> b)
 {
     rewriteWithCommonDenominators(a, b);
     pair<int, int> sum;
     sum.first = a.first + b.first;
     sum.second = a.second;
+    simplify(sum);
     return sum;
 }
 
@@ -135,6 +143,7 @@ pair<int, int> subtractFractions(pair<int, int> a, pair<int, int> b)
     pair<int, int> difference;
     difference.first = a.first - b.first;
     difference.second = a.second;
+    simplify(difference);
     return difference;
 }
 
@@ -143,6 +152,7 @@ pair<int, int> multiplyFractions(pair<int, int> a, pair<int, int> b)
     pair<int, int> product;
     product.first = a.first * b.first;
     product.second = a.second * b.second;
+    simplify(product);
     return product;
 }
 
@@ -151,6 +161,7 @@ pair<int, int> divideFractions(pair<int, int> a, pair<int, int> b)
     pair<int, int> quotient;
     quotient.first = a.first * b.second;
     quotient.second = a.second * b.first;
+    simplify(quotient);
     return quotient;
 }
 
@@ -217,13 +228,6 @@ public:
     }
 };
 
-// void simplify(pair<int, int> &fraction)
-// {
-//     int gcd = findGCD(fraction.first, fraction.second);
-//     fraction.first /= gcd;
-//     fraction.second /= gcd;
-// }
-
 vector<char> polynomialInput()
 {
     vector<char> input;
@@ -237,13 +241,27 @@ vector<char> polynomialInput()
     return input;
 }
 
+Polynomial askForPolynomial()
+{
+    vector<char> input = polynomialInput();
+    vector<pair<int, int>> coefficients = parseCoefficients(input);
+    for(int i=0; i<coefficients.size(); i++)
+        simplify(coefficients[i]);
+    return Polynomial(coefficients);
+}
+
 void startLoop()
 {
     cout << "give polynomial" << endl;
-    vector<char> firstInput = polynomialInput();
-    vector<pair<int, int>> coefficients = parseCoefficients(firstInput);
-    Polynomial firstPolynomial(coefficients);
+    Polynomial firstPolynomial = askForPolynomial();
+    Polynomial secondPolynomial = askForPolynomial();
+
     firstPolynomial.print();
+    secondPolynomial.print();
+
+    Polynomial summedPolynomial = firstPolynomial.add(secondPolynomial);
+    summedPolynomial.print();
+    // Polynomial summedPolynomial =
 
     /*  if 1, 2, 3, 4, 7
      give polynomial
