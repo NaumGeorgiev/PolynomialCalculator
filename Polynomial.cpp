@@ -21,7 +21,7 @@ public:
         return coefficients;
     }
 
-    pair<int, int> getValueOn(int index) // TODO: getCoefficientAt
+    pair<int, int> getCoefficientAt(int index)
     {
         if (index < coefficients.size())
             return coefficients[index];
