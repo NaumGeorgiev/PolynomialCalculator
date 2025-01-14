@@ -89,68 +89,6 @@ vector<pair<int, int>> parseCoefficients(const vector<char> &input)
     return convertedCoefficients;
 }
 
-class Polynomial
-{
-private:
-    vector<pair<int, int>> coefficients;
-
-public:
-    Polynomial(const vector<pair<int, int>> &coefficients)
-    {
-        this->coefficients = coefficients;
-    }
-
-    const vector<pair<int, int>> &getCoefficients()
-    {
-        return coefficients;
-    }
-
-    pair<int, int> getCoefficientAt(int index)
-    {
-        if (index < coefficients.size())
-            return coefficients[index];
-        return pair{0, 0};
-    }
-
-    void print()
-    {
-
-        for (int i = 0; i < coefficients.size(); i++)
-        {
-            int numerator = coefficients[i].first;
-            int denominator = coefficients[i].second;
-            if (denominator == 1)
-                cout << numerator;
-            else
-                cout << '(' << numerator << '/' << denominator << ')';
-            if (i != 0)
-            {
-                cout << 'x';
-                if (i != 1)
-                    cout << '^' << i;
-            }
-            if (i != coefficients.size() - 1)
-                cout << " + ";
-        }
-        cout << endl;
-    }
-};
-
-void startLoop()
-{
-    cout << "give polynomial" << endl;
-    vector<char> firstInput = {'3', '.', '1', '4', '/', ',', '1', '/', '3', '4'};
-    vector<pair<int, int>> coefficients = parseCoefficients(firstInput);
-    Polynomial firstPolynomial(coefficients);
-    firstPolynomial.print();
-
-    /*  if 1, 2, 3, 4, 7
-     give polynomial
-     if 5, 6
-     give number
-     else do nothing*/
-}
-
 int findGCD(int a, int b)
 {
     while (b != 0)
@@ -160,13 +98,6 @@ int findGCD(int a, int b)
         a = temp;
     }
     return a;
-}
-
-void simplify(pair<int, int> &fraction)
-{
-    int gcd = findGCD(fraction.first, fraction.second);
-    fraction.first /= gcd;
-    fraction.second /= gcd;
 }
 
 int findLCD(int a, int b)
@@ -221,6 +152,75 @@ pair<int, int> divide(pair<int, int> a, pair<int, int> b)
     quotient.first = a.first * b.second;
     quotient.second = a.second * b.first;
     return quotient;
+}
+
+class Polynomial
+{
+private:
+    vector<pair<int, int>> coefficients;
+
+public:
+    Polynomial(const vector<pair<int, int>> &coefficients)
+    {
+        this->coefficients = coefficients;
+    }
+
+    const vector<pair<int, int>> &getCoefficients()
+    {
+        return coefficients;
+    }
+
+    pair<int, int> getCoefficientAt(int index)
+    {
+        if (index < coefficients.size())
+            return coefficients[index];
+        return pair{0, 0};
+    }
+
+    void print()
+    {
+
+        for (int i = 0; i < coefficients.size(); i++)
+        {
+            int numerator = coefficients[i].first;
+            int denominator = coefficients[i].second;
+            if (denominator == 1)
+                cout << numerator;
+            else
+                cout << '(' << numerator << '/' << denominator << ')';
+            if (i != 0)
+            {
+                cout << 'x';
+                if (i != 1)
+                    cout << '^' << i;
+            }
+            if (i != coefficients.size() - 1)
+                cout << " + ";
+        }
+        cout << endl;
+    }
+};
+
+// void simplify(pair<int, int> &fraction)
+// {
+//     int gcd = findGCD(fraction.first, fraction.second);
+//     fraction.first /= gcd;
+//     fraction.second /= gcd;
+// }
+
+void startLoop()
+{
+    cout << "give polynomial" << endl;
+    vector<char> firstInput = {'3', '.', '1', '4', '/', ',', '1', '/', '3', '4'};
+    vector<pair<int, int>> coefficients = parseCoefficients(firstInput);
+    Polynomial firstPolynomial(coefficients);
+    firstPolynomial.print();
+
+    /*  if 1, 2, 3, 4, 7
+     give polynomial
+     if 5, 6
+     give number
+     else do nothing*/
 }
 
 int main()
