@@ -209,12 +209,23 @@ pair<int, int> add(pair<int, int> a, pair<int, int> b)
     return sum;
 }
 
+pair<int, int> subtract(pair<int, int> a, pair<int, int> b)
+{
+    rewriteWithCommonDenominators(a, b);
+    pair<int, int> sum;
+    sum.first = a.first - b.first;
+    sum.second = a.second;
+    return sum;
+}
+
 int main()
 {
     pair<int, int> a = {1, 2};
     pair<int, int> b = {1, 3};
     
     pair<int, int> sum = add(a, b);
+    pair<int, int> diff = subtract(a, b);
+    cout << diff.first << '/' << diff.second << endl;    
     cout << sum.first << '/' << sum.second << endl;
     startLoop();
 
