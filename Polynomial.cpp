@@ -147,8 +147,6 @@ vector<pair<int, int>> getConvertedCoefficients(const vector<char> &input)
     return convertedCoefficients;
 }
 
-
-
 void startLoop()
 {
     cout << "give polynomial" << endl;
@@ -157,8 +155,6 @@ void startLoop()
     Polynomial firstPolynomial(coefficients);
     firstPolynomial.print();
 
-
-
     /*  if 1, 2, 3, 4, 7
      give polynomial
      if 5, 6
@@ -166,28 +162,60 @@ void startLoop()
      else do nothing*/
 }
 
-   int findGCD(int a, int b)
+int findGCD(int a, int b)
+{
+    while (b != 0)
     {
-        while (b != 0)
-        {
-            int temp = b;
-            b = a % b;
-            a = temp;
-        }
-        return a;
+        int temp = b;
+        b = a % b;
+        a = temp;
     }
+    return a;
+}
 
-    void simplify(pair<int, int> &fraction){
-        int gcd = findGCD(fraction.first, fraction.second);
-        fraction.first/=gcd;
-        fraction.second/=gcd;
-    }
+void simplify(pair<int, int> &fraction)
+{
+    int gcd = findGCD(fraction.first, fraction.second);
+    fraction.first /= gcd;
+    fraction.second /= gcd;
+}
+
+int findLCD(int a, int b)
+{
+    int gcd = findGCD(a, b);
+    return a * b / gcd;
+}
+
+void rewriteWithCommonDenominators(pair<int, int> &a, pair<int, int> &b)
+{
+    int denominatorA = a.second;
+    int denominatorB = b.second;
+    int lcd = findLCD(denominatorA, denominatorB);
+    int multiplicatorA = lcd / denominatorA;
+    int multiplicatorB = lcd / denominatorB;
+
+    a.first *= multiplicatorA;
+    a.second *= multiplicatorA;
+    b.first *= multiplicatorB;
+    b.second *= multiplicatorB;
+}
+
+pair<int, int> add(pair<int, int> a, pair<int, int> b)
+{
+    rewriteWithCommonDenominators(a, b);
+    pair<int, int> sum;
+    sum.first = a.first + b.first;
+    sum.second = a.second;
+    return sum;
+}
 
 int main()
 {
-    pair<int, int> a = {3, 6};
-    simplify(a);
-    cout << a.first << '/' << a.second << endl;
+    pair<int, int> a = {1, 2};
+    pair<int, int> b = {1, 3};
+    
+    pair<int, int> sum = add(a, b);
+    cout << sum.first << '/' << sum.second << endl;
     startLoop();
 
     return 0;
