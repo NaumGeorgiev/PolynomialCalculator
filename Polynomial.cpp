@@ -21,6 +21,13 @@ public:
         return coefficients;
     }
 
+    pair<int, int> getValueOn(int index)
+    {
+        if (index < coefficients.size())
+            return coefficients[index];
+        return pair{0, 0};
+    }
+
     void print()
     {
 
@@ -221,16 +228,16 @@ pair<int, int> subtract(pair<int, int> a, pair<int, int> b)
 pair<int, int> multiply(pair<int, int> a, pair<int, int> b)
 {
     pair<int, int> product;
-    product.first=a.first*b.first;
-    product.second=a.second*b.second;
+    product.first = a.first * b.first;
+    product.second = a.second * b.second;
     return product;
 }
 
 pair<int, int> divide(pair<int, int> a, pair<int, int> b)
 {
     pair<int, int> quotient;
-    quotient.first=a.first*b.second;
-    quotient.second=a.second*b.first;
+    quotient.first = a.first * b.second;
+    quotient.second = a.second * b.first;
     return quotient;
 }
 
@@ -238,16 +245,16 @@ int main()
 {
     pair<int, int> a = {1, 2};
     pair<int, int> b = {1, 3};
-    
+
     pair<int, int> sum = add(a, b);
     pair<int, int> diff = subtract(a, b);
     pair<int, int> product = multiply(a, b);
     pair<int, int> quotient = divide(a, b);
 
-    cout << product.first << '/' << product.second << endl;    
-    cout << quotient.first << '/' << quotient.second << endl;   
+    cout << product.first << '/' << product.second << endl;
+    cout << quotient.first << '/' << quotient.second << endl;
 
-    cout << diff.first << '/' << diff.second << endl;    
+    cout << diff.first << '/' << diff.second << endl;
     cout << sum.first << '/' << sum.second << endl;
     startLoop();
 
