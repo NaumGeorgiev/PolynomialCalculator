@@ -15,6 +15,29 @@ public:
     {
         this->coefficients = coefficients;
     }
+
+    void print()
+    {
+
+        for (int i = 0; i < coefficients.size(); i++)
+        {
+            int numerator = coefficients[i].first;
+            int denominator = coefficients[i].second;
+            if (denominator == 1)
+                cout << numerator;
+            else
+                cout << '(' << numerator << '/' << denominator << ')';
+            if (i != 0)
+            {
+                cout << 'x';
+                if (i != 1)
+                    cout << '^' << i;
+            }
+            if(i!=coefficients.size()-1)
+                cout << " + ";
+        }
+        cout << endl;
+    }
 };
 
 vector<vector<char>> getSplitCoefficients(const vector<char> &input)
@@ -122,8 +145,10 @@ vector<pair<int, int>> getConvertedCoefficients(const vector<char> &input)
 void startLoop()
 {
     cout << "give polynomial" << endl;
-    vector<char> input = {'3', '.', '1', '4','/',',','1','/','3'};
+    vector<char> input = {'3', '.', '1', '4', '/', ',', '1', '/', '3'};
     vector<pair<int, int>> coefficients = getConvertedCoefficients(input);
+    Polynomial firstPolynomial(coefficients);
+    firstPolynomial.print();
 }
 
 int main()
