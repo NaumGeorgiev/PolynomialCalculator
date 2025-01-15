@@ -73,10 +73,13 @@ pair<int, int> parseCoefficient(const vector<char> &coefficient)
     const int denominatorDecimalDigitCount = getDecimalDigitCount(denominator);
     const int higher = max(numeratorDecimalDigitCount, denominatorDecimalDigitCount);
 
-    const int convertedNumerator = toInt(numerator);
-    const int convertedDenominator = toInt(denominator);
+    int parsedNumerator = toInt(numerator);
+    int parsedDenominator = toInt(denominator);
 
-    return pair{convertedNumerator, convertedDenominator};
+    parsedNumerator*=pow(10, higher-numeratorDecimalDigitCount);
+    parsedDenominator*=pow(10, higher-denominatorDecimalDigitCount);
+
+    return pair{parsedNumerator, parsedDenominator};
 }
 
 vector<pair<int, int>> parseCoefficients(const vector<char> &input)
