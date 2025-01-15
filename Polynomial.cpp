@@ -304,7 +304,10 @@ public:
         int dividendSize = dividendCoefficients.size();
         int divisorSize = divisorCoefficients.size();
         int quotientSize = dividendCoefficients.size() - divisorCoefficients.size() + 1;
-
+        if (dividendSize < divisorSize)
+        {
+            return Polynomial({{0, 1}});
+        }
         vector<pair<int, int>> quotient(quotientSize);
 
         for (int i = 0; i < quotientSize; i++)
@@ -317,8 +320,7 @@ public:
             Polynomial tempPolynomial(tempCoefficients);
             dividend = dividend.subtract(tempPolynomial);
             dividendCoefficients = dividend.getCoefficients();
-            removeLastZeros(dividendCoefficients);
-            dividend = Polynomial(dividendCoefficients);
+            dividend.removedLastZeros();
             dividendSize = dividendCoefficients.size();
             if (dividendSize < divisorSize)
                 return Polynomial(quotient).removedLastZeros();
@@ -386,6 +388,7 @@ public:
     vector<pair<int, int>> roots()
     {
         Polynomial substitute(coefficients);
+        substitute = substitute.removedLastZeros();
         vector<pair<int, int>> rootsVector;
         vector<pair<int, int>> possibles = substitute.possibleRoots();
         for (int i = 0; i < possibles.size(); i++)
