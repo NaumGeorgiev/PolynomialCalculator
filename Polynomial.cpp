@@ -222,8 +222,8 @@ public:
         int thisSize = coefficients.size();
         int otherSize = other.getCoefficients().size();
         vector<pair<int, int>> multipliedCoefficients(thisSize + otherSize - 1);
-        for(int i=0; i<multipliedCoefficients.size(); i++)
-            multipliedCoefficients[i]={0, 1};
+        for (int i = 0; i < multipliedCoefficients.size(); i++)
+            multipliedCoefficients[i] = {0, 1};
         for (int i = 0; i < coefficients.size(); i++)
             for (int j = 0; j < other.coefficients.size(); j++)
             {
@@ -235,9 +235,20 @@ public:
         return Polynomial(multipliedCoefficients);
     }
 
-    // Polynomial divide(Polynomial &other)
-    // {
-    // }
+    pair<int, int> powFraction(pair<int, int> fraction, int n)
+    {
+        fraction.first = pow(fraction.first, n);
+        fraction.second = pow(fraction.second, n);
+        return fraction;
+    }
+
+    pair<int, int> valueForX(pair<int, int> x)
+    {
+        pair<int, int> value = {0, 1};
+        for (int i = 0; i < coefficients.size(); i++)
+            value = addFractions(value, multiplyFractions(powFraction(x, i), coefficients[i]));
+        return value;
+    }
 
     Polynomial multiply(pair<int, int> factor)
     {
@@ -296,20 +307,26 @@ void startLoop()
 {
     cout << "give polynomial" << endl;
     Polynomial firstPolynomial = askForPolynomial();
-    Polynomial secondPolynomial = askForPolynomial();
+    // Polynomial secondPolynomial = askForPolynomial();
+
+    firstPolynomial.print();
+
+    // pair<int, int> value = firstPolynomial.valueForX(pair{2.5, 1});
+    // cout << value.first << '/' << value.second;
 
     // Polynomial summedPolynomial = firstPolynomial.add(secondPolynomial);
     // Polynomial subtractedPolynomial = firstPolynomial.subtract(secondPolynomial);
-    Polynomial multipliedPolynomial = firstPolynomial.multiply(secondPolynomial);
+    // Polynomial multipliedPolynomial = firstPolynomial.multiply(secondPolynomial);
     // Polynomial dividedPolynomial = firstPolynomial.divide(secondPolynomial);
 
     // Polynomial summedPolynomial = firstPolynomial.add(secondPolynomial);
     // Polynomial summedPolynomial = firstPolynomial.add(secondPolynomial);
-    // Polynomial factored = firstPolynomial.multiply(pair{7, 1});
+    // vector<char> factor = {'7','.','5','/','1'};
+    // Polynomial factored = firstPolynomial.multiply(pair{parseCoefficient(factor)});
     // factored.print();
     // summedPolynomial.print();
     // subtractedPolynomial.print();
-    multipliedPolynomial.print();
+    // multipliedPolynomial.print();
     // dividedPolynomial.print();
 
     /*  if 1, 2, 3, 4, 7
