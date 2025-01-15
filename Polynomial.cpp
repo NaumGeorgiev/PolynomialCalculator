@@ -348,17 +348,27 @@ public:
     }
 
     vector<pair<int, int>> possibleRoots()
-    { // let l = lastCoefficientDivisors and f = firstCoefficientDivisors
+    {
         vector<pair<int, int>> roots;
+        if (coefficients.size() == 2)
+        {
+            pair<int, int> firstCoefficient = coefficients[0];
+            firstCoefficient.first *= -1;
+            pair<int, int> root = divideFractions(firstCoefficient, coefficients[1]);
+            roots.push_back(root);
+            return roots;
+        }
+        // let l = lastCoefficientDivisors and f = firstCoefficientDivisors
         vector<pair<int, int>> l = divisors(coefficients[coefficients.size() - 1]);
         vector<pair<int, int>> f = divisors(coefficients[0]);
         for (int i = 0; i < f.size(); i++)
             for (int j = 0; j < l.size(); j++)
             {
                 pair<int, int> possibleRoot = divideFractions(f[i], l[j]);
-                if(possibleRoot.second<0){
-                    possibleRoot.second*=-1;
-                    possibleRoot.first*=-1;
+                if (possibleRoot.second < 0)
+                {
+                    possibleRoot.second *= -1;
+                    possibleRoot.first *= -1;
                 }
                 if (!contains(possibleRoot, roots))
                     roots.push_back(possibleRoot);
@@ -389,6 +399,14 @@ public:
             }
         return rootsVector;
     }
+
+    // void printDecomposition(vector<pair<int ,int>> roots){
+    //     for(int i=0; i<roots.size(); i++){
+    //         int numerator = roots[i].first;
+    //         int denominator = roots[i].second;
+    //         if(denominator==1 || )
+    //     }
+    // }
 
     void print()
     {
@@ -447,7 +465,7 @@ void startLoop()
     // remainder.print();
 
     vector<pair<int, int>> roots = firstPolynomial.roots();
-    for(int i=0; i<roots.size(); i++)
+    for (int i = 0; i < roots.size(); i++)
         cout << roots[i].first << '/' << roots[i].second << ", ";
 
     // for (int i = 0; i < dividers.siz
