@@ -168,7 +168,7 @@ pair<int, int> divideFractions(pair<int, int> a, pair<int, int> b)
     return quotient;
 }
 
-vector<pair<int, int>> possibleRoots(pair<int, int> fraction)
+vector<pair<int, int>> divisors(pair<int, int> fraction)
 {
     vector<pair<int, int>> divisors;
     int numerator = fraction.first;
