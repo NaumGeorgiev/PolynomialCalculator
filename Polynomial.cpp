@@ -314,7 +314,7 @@ public:
         {
             quotient[quotientSize - 1 - i] = divideFractions(dividendCoefficients[dividendSize - 1], divisorCoefficients[divisorSize - 1]);
             vector<pair<int, int>> tempCoefficients(dividendSize);
-            for (int j = 0; j < dividendSize; j++)
+            for (int j = 0; j < divisorSize; j++)
                 tempCoefficients[dividendSize - 1 - j] = multiplyFractions(quotient[quotientSize - 1 - i], divisorCoefficients[divisorSize - 1 - j]);
             replaceZeroDenominators(tempCoefficients);
             Polynomial tempPolynomial(tempCoefficients);
@@ -326,6 +326,38 @@ public:
                 return Polynomial(quotient).removedLastZeros();
         }
     }
+
+    // Polynomial divide(Polynomial divisor)
+    // {
+    //     vector<pair<int, int>> divisorCoefficients = divisor.getCoefficients();
+    //     Polynomial dividend(coefficients);
+    //     vector<pair<int, int>> dividendCoefficients = dividend.getCoefficients();
+
+    //     int dividendSize = dividendCoefficients.size();
+    //     int divisorSize = divisorCoefficients.size();
+    //     int quotientSize = dividendCoefficients.size() - divisorCoefficients.size() + 1;
+    //     if (dividendSize < divisorSize)
+    //     {
+    //         return Polynomial({{0, 1}});
+    //     }
+    //     vector<pair<int, int>> quotient(quotientSize);
+
+    //     for (int i = 0; i < quotientSize; i++)
+    //     {
+    //         quotient[quotientSize - 1 - i] = divideFractions(dividendCoefficients[dividendSize - 1], divisorCoefficients[divisorSize - 1]);
+    //         vector<pair<int, int>> tempCoefficients(dividendSize);
+    //         for (int j = 0; j < dividendSize; j++)
+    //             tempCoefficients[dividendSize - 1 - j] = multiplyFractions(quotient[quotientSize - 1 - i], divisorCoefficients[divisorSize - 1 - j]);
+    //         replaceZeroDenominators(tempCoefficients);
+    //         Polynomial tempPolynomial(tempCoefficients);
+    //         dividend = dividend.subtract(tempPolynomial);
+    //         dividendCoefficients = dividend.getCoefficients();
+    //         dividend.removedLastZeros();
+    //         dividendSize = dividendCoefficients.size();
+    //         if (dividendSize < divisorSize)
+    //             return Polynomial(quotient).removedLastZeros();
+    //     }
+    // }
 
     pair<int, int> powFraction(pair<int, int> fraction, int n)
     {
@@ -403,13 +435,36 @@ public:
         return rootsVector;
     }
 
-    // void printDecomposition(vector<pair<int ,int>> roots){
-    //     for(int i=0; i<roots.size(); i++){
-    //         int numerator = roots[i].first;
-    //         int denominator = roots[i].second;
-    //         if(denominator==1 || )
-    //     }
-    // }
+    void printDecomposition(vector<pair<int, int>> roots)
+    {
+
+        for (int i = 0; i < roots.size(); i++)
+        {
+            int numerator = roots[i].first;
+            int denominator = roots[i].second;
+            if (numerator == 0)
+                cout << 'x';
+            else if (denominator == 1)
+                if (numerator < 0)
+                    cout << "(x + " << numerator*(-1) << ')';
+                else
+                    cout << "(x - " << numerator << ')';
+            else if (numerator < 0)
+                cout
+                    << "(x + " << numerator * (-1) << '/' << denominator << ')';
+            else
+                cout << "(x - " << numerator << '/' << denominator << ')';
+            int degree = 1;
+            for (int j = i + 1; j < roots.size(); j++)
+                if (roots[j] == roots[i])
+                    degree++;
+            if (degree > 1)
+            {
+                cout << '^' << degree;
+                i += degree - 1;
+            }
+        }
+    }
 
     void print()
     {
@@ -468,8 +523,7 @@ void startLoop()
     // remainder.print();
 
     vector<pair<int, int>> roots = firstPolynomial.roots();
-    for (int i = 0; i < roots.size(); i++)
-        cout << roots[i].first << '/' << roots[i].second << ", ";
+    firstPolynomial.printDecomposition(roots);
 
     // for (int i = 0; i < dividers.siz
     /*  if 1, 2, 3, 4, 7
