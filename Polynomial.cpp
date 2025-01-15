@@ -181,13 +181,20 @@ vector<pair<int, int>> divisors(pair<int, int> fraction)
         {
             if (denominator % j != 0)
                 continue;
-            divisors.push_back({j, i});
-            divisors.push_back({-j, i});
+            divisors.push_back({i, j});
+            // divisors.push_back({-i, j});
         }
     }
     return divisors;
 }
 
+bool contains(pair<int, int> element, vector<pair<int, int>> possibleRoots)
+{
+    for (int i = 0; i < possibleRoots.size(); i++)
+        if (possibleRoots[i] == element)
+            return true;
+    return false;
+}
 class Polynomial
 {
 private:
@@ -280,6 +287,21 @@ public:
         return Polynomial(coefficients);
     }
 
+    vector<pair<int, int>> possibleRoots()
+    { // let l = lastCoefficientDivisors and f = firstCoefficientDivisors
+        vector<pair<int, int>> roots;
+        vector<pair<int, int>> l = divisors(coefficients[coefficients.size() - 1]);
+        vector<pair<int, int>> f = divisors(coefficients[0]);
+        for (int i = 0; i < l.size(); i++)
+            for (int j = 0; j < f.size(); j++)
+            {
+                pair<int, int> possibleRoot = divideFractions(l[i], f[j]);
+                if (!contains(possibleRoot, roots))
+                    roots.push_back(possibleRoot);
+            }
+        return roots;
+    }
+
     // vector<pair<int, int>> possibleRoots()
     // {
     //     vector<pair<int, int>> roots();
@@ -349,10 +371,21 @@ Polynomial askForPolynomial()
 void startLoop()
 {
     cout << "give polynomial" << endl;
-    // Polynomial firstPolynomial = askForPolynomial();
-    vector<pair<int, int>> dividers = divisors({15, 4});
-    for(int i=0; i<dividers.size(); i++)
-        cout << dividers[i].first << "/" << dividers[i].second << " ,";
+    Polynomial firstPolynomial = askForPolynomial();
+    // vector<pair<int, int>> dividers = divisors({9, 2});
+    // vector<pair<int, int>> dividers2 = divisors({3, 2});
+    vector<pair<int, int>> roots = firstPolynomial.possibleRoots();
+    for(int i=0; i<roots.size(); i++){
+        cout << roots[i].first << '/' << roots[i].second << ", ";
+    }
+
+    // for (int i = 0; i < dividers.size(); i++)
+    //     cout << dividers[i].first << "/" << dividers[i].second << " ,";
+    // cout << endl;
+    // for (int i = 0; i < dividers2.size(); i++)
+    //     cout << dividers2[i].first << "/" << dividers2[i].second << " ,";
+    // cout << endl;
+
 
     // Polynomial secondPolynomial = askForPolynomial();
 
@@ -383,9 +416,6 @@ void startLoop()
 
 int main()
 {
-    pair<int, int> a = {1, 2};
-    pair<int, int> b = {1, 3};
     startLoop();
-
     return 0;
 }
