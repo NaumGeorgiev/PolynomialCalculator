@@ -203,7 +203,7 @@ void replaceZeroDenominators(vector<pair<int, int>> &coefficients)
             coefficients[i] = {0, 1};
 }
 
-void removeLastZeroes(vector<pair<int, int>> &coefficients)
+void removeLastZeros(vector<pair<int, int>> &coefficients)
 {
     int indexesToBeRemoved = 0;
     int coefficientSize = coefficients.size();
@@ -257,7 +257,7 @@ public:
             else if (function == '-')
                 summedCoefficients.push_back(subtractFractions(thisValue, otherValue));
         }
-        return Polynomial(summedCoefficients);
+        return Polynomial(summedCoefficients).removedLastZeros();
     }
 
     Polynomial add(Polynomial &other)
@@ -275,8 +275,6 @@ public:
         int thisSize = coefficients.size();
         int otherSize = other.getCoefficients().size();
         vector<pair<int, int>> multipliedCoefficients(thisSize + otherSize - 1);
-        // for (int i = 0; i < multipliedCoefficients.size(); i++)
-        //     multipliedCoefficients[i] = {0, 1};
         replaceZeroDenominators(multipliedCoefficients);
         for (int i = 0; i < coefficients.size(); i++)
             for (int j = 0; j < other.coefficients.size(); j++)
@@ -286,7 +284,14 @@ public:
                 pair<int, int> multipliedValue = multiplyFractions(thisValue, otherValue);
                 multipliedCoefficients[i + j] = addFractions(multipliedCoefficients[i + j], multipliedValue);
             }
-        return Polynomial(multipliedCoefficients);
+        return Polynomial(multipliedCoefficients).removedLastZeros();
+    }
+
+    Polynomial removedLastZeros()
+    {
+        vector<pair<int, int>> removedLastZerosCoefficient = coefficients;
+        removeLastZeros(removedLastZerosCoefficient);
+        return Polynomial(removedLastZerosCoefficient);
     }
 
     Polynomial divide(Polynomial divisor)
@@ -311,13 +316,12 @@ public:
             Polynomial tempPolynomial(tempCoefficients);
             dividend = dividend.subtract(tempPolynomial);
             dividendCoefficients = dividend.getCoefficients();
-            removeLastZeroes(dividendCoefficients);
+            removeLastZeros(dividendCoefficients);
             dividend = Polynomial(dividendCoefficients);
             dividendSize = dividendCoefficients.size();
             if (dividendSize < divisorSize)
-                return Polynomial(quotient);
+                return Polynomial(quotient).removedLastZeros();
         }
-        return Polynomial(coefficients);
     }
 
     pair<int, int> powFraction(pair<int, int> fraction, int n)
@@ -339,7 +343,7 @@ public:
     {
         for (int i = 0; i < coefficients.size(); i++)
             coefficients[i] = multiplyFractions(coefficients[i], factor);
-        return Polynomial(coefficients);
+        return Polynomial(coefficients).removedLastZeros();
     }
 
     vector<pair<int, int>> possibleRoots()
@@ -360,7 +364,8 @@ public:
     Polynomial remainder(Polynomial divisor, Polynomial quotient)
     {
         Polynomial toBeSubtracted = divisor.multiply(quotient);
-        return subtract(toBeSubtracted);
+        Polynomial toBeReturned = subtract(toBeSubtracted);
+            return toBeReturned.removedLastZeros();
     }
 
     // vector<pair<int, int>> roots(){
