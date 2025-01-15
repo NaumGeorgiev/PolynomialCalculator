@@ -185,7 +185,7 @@ public:
     {
         if (index < coefficients.size())
             return coefficients[index];
-        return pair{0, 0};
+        return pair{0, 1};
     }
 
     Polynomial operateWith(Polynomial other, char function)
@@ -229,6 +229,12 @@ public:
     Polynomial divide(Polynomial &other)
     {
         return operateWith(other, '/');
+    }
+
+    Polynomial multiply(pair<int, int> factor){
+        for(int i=0; i<coefficients.size(); i++)
+            coefficients[i] = multiplyFractions(coefficients[i], factor);
+        return Polynomial(coefficients);
     }
 
     void print()
@@ -290,12 +296,12 @@ void startLoop()
     
     // Polynomial summedPolynomial = firstPolynomial.add(secondPolynomial);
     // Polynomial summedPolynomial = firstPolynomial.add(secondPolynomial);
-
-    // summedPolynomial.print();
+    Polynomial factored = firstPolynomial.multiply(pair{7, 1});
+    factored.print();
+    summedPolynomial.print();
     subtractedPolynomial.print();
-    // multipliedPolynomial.print();
-    // dividedPolynomial.print();
-    // Polynomial summedPolynomial =
+    multipliedPolynomial.print();
+    dividedPolynomial.print();
 
     /*  if 1, 2, 3, 4, 7
      give polynomial
