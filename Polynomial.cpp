@@ -191,7 +191,7 @@ public:
     Polynomial operateWith(Polynomial other, char function)
     {
         int thisSize = coefficients.size();
-        int otherSize = other.coefficients.size();
+        int otherSize = other.getCoefficients().size();
         int higherSize = max(thisSize, otherSize);
 
         vector<pair<int, int>> summedCoefficients;
@@ -203,10 +203,6 @@ public:
                 summedCoefficients.push_back(addFractions(thisValue, otherValue));
             else if (function == '-')
                 summedCoefficients.push_back(subtractFractions(thisValue, otherValue));
-            else if (function == '.')
-                summedCoefficients.push_back(multiplyFractions(thisValue, otherValue));
-            else if (function == '/')
-                summedCoefficients.push_back(divideFractions(thisValue, otherValue));
         }
         return Polynomial(summedCoefficients);
     }
@@ -223,16 +219,29 @@ public:
 
     Polynomial multiply(Polynomial &other)
     {
-        return operateWith(other, '.');
+        int thisSize = coefficients.size();
+        int otherSize = other.getCoefficients().size();
+        vector<pair<int, int>> multipliedCoefficients(thisSize + otherSize - 1);
+        for(int i=0; i<multipliedCoefficients.size(); i++)
+            multipliedCoefficients[i]={0, 1};
+        for (int i = 0; i < coefficients.size(); i++)
+            for (int j = 0; j < other.coefficients.size(); j++)
+            {
+                pair<int, int> thisValue = getCoefficientAt(i);
+                pair<int, int> otherValue = other.getCoefficientAt(j);
+                pair<int, int> multipliedValue = multiplyFractions(thisValue, otherValue);
+                multipliedCoefficients[i + j] = addFractions(multipliedCoefficients[i + j], multipliedValue);
+            }
+        return Polynomial(multipliedCoefficients);
     }
 
-    Polynomial divide(Polynomial &other)
+    // Polynomial divide(Polynomial &other)
+    // {
+    // }
+
+    Polynomial multiply(pair<int, int> factor)
     {
-        return operateWith(other, '/');
-    }
-
-    Polynomial multiply(pair<int, int> factor){
-        for(int i=0; i<coefficients.size(); i++)
+        for (int i = 0; i < coefficients.size(); i++)
             coefficients[i] = multiplyFractions(coefficients[i], factor);
         return Polynomial(coefficients);
     }
@@ -289,19 +298,19 @@ void startLoop()
     Polynomial firstPolynomial = askForPolynomial();
     Polynomial secondPolynomial = askForPolynomial();
 
-    Polynomial summedPolynomial = firstPolynomial.add(secondPolynomial);
-    Polynomial subtractedPolynomial = firstPolynomial.subtract(secondPolynomial);
+    // Polynomial summedPolynomial = firstPolynomial.add(secondPolynomial);
+    // Polynomial subtractedPolynomial = firstPolynomial.subtract(secondPolynomial);
     Polynomial multipliedPolynomial = firstPolynomial.multiply(secondPolynomial);
-    Polynomial dividedPolynomial = firstPolynomial.divide(secondPolynomial);
-    
+    // Polynomial dividedPolynomial = firstPolynomial.divide(secondPolynomial);
+
     // Polynomial summedPolynomial = firstPolynomial.add(secondPolynomial);
     // Polynomial summedPolynomial = firstPolynomial.add(secondPolynomial);
-    Polynomial factored = firstPolynomial.multiply(pair{7, 1});
-    factored.print();
-    summedPolynomial.print();
-    subtractedPolynomial.print();
+    // Polynomial factored = firstPolynomial.multiply(pair{7, 1});
+    // factored.print();
+    // summedPolynomial.print();
+    // subtractedPolynomial.print();
     multipliedPolynomial.print();
-    dividedPolynomial.print();
+    // dividedPolynomial.print();
 
     /*  if 1, 2, 3, 4, 7
      give polynomial
