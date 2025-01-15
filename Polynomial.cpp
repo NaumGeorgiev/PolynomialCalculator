@@ -188,7 +188,7 @@ public:
         return pair{0, 0};
     }
 
-    Polynomial add(Polynomial &other)
+    Polynomial operateWith(Polynomial other, char function)
     {
         int thisSize = coefficients.size();
         int otherSize = other.coefficients.size();
@@ -199,9 +199,36 @@ public:
         {
             pair<int, int> thisValue = getCoefficientAt(i);
             pair<int, int> otherValue = other.getCoefficientAt(i);
-            summedCoefficients.push_back(addFractions(thisValue, otherValue));
+            if (function == '+')
+                summedCoefficients.push_back(addFractions(thisValue, otherValue));
+            else if (function == '-')
+                summedCoefficients.push_back(subtractFractions(thisValue, otherValue));
+            else if (function == '.')
+                summedCoefficients.push_back(multiplyFractions(thisValue, otherValue));
+            else if (function == '/')
+                summedCoefficients.push_back(divideFractions(thisValue, otherValue));
         }
         return Polynomial(summedCoefficients);
+    }
+
+    Polynomial add(Polynomial &other)
+    {
+        return operateWith(other, '+');
+    }
+
+    Polynomial subtract(Polynomial &other)
+    {
+        return operateWith(other, '-');
+    }
+
+    Polynomial multiply(Polynomial &other)
+    {
+        return operateWith(other, '.');
+    }
+
+    Polynomial divide(Polynomial &other)
+    {
+        return operateWith(other, '/');
     }
 
     void print()
@@ -245,7 +272,7 @@ Polynomial askForPolynomial()
 {
     vector<char> input = polynomialInput();
     vector<pair<int, int>> coefficients = parseCoefficients(input);
-    for(int i=0; i<coefficients.size(); i++)
+    for (int i = 0; i < coefficients.size(); i++)
         simplify(coefficients[i]);
     return Polynomial(coefficients);
 }
@@ -256,11 +283,18 @@ void startLoop()
     Polynomial firstPolynomial = askForPolynomial();
     Polynomial secondPolynomial = askForPolynomial();
 
-    firstPolynomial.print();
-    secondPolynomial.print();
-
     Polynomial summedPolynomial = firstPolynomial.add(secondPolynomial);
-    summedPolynomial.print();
+    Polynomial subtractedPolynomial = firstPolynomial.subtract(secondPolynomial);
+    Polynomial multipliedPolynomial = firstPolynomial.multiply(secondPolynomial);
+    Polynomial dividedPolynomial = firstPolynomial.divide(secondPolynomial);
+    
+    // Polynomial summedPolynomial = firstPolynomial.add(secondPolynomial);
+    // Polynomial summedPolynomial = firstPolynomial.add(secondPolynomial);
+
+    // summedPolynomial.print();
+    subtractedPolynomial.print();
+    // multipliedPolynomial.print();
+    // dividedPolynomial.print();
     // Polynomial summedPolynomial =
 
     /*  if 1, 2, 3, 4, 7
@@ -274,17 +308,6 @@ int main()
 {
     pair<int, int> a = {1, 2};
     pair<int, int> b = {1, 3};
-
-    // pair<int, int> sum = add(a, b);
-    // pair<int, int> diff = subtract(a, b);
-    // pair<int, int> product = multiply(a, b);
-    // pair<int, int> quotient = divide(a, b);
-
-    // cout << product.first << '/' << product.second << endl;
-    // cout << quotient.first << '/' << quotient.second << endl;
-
-    // cout << diff.first << '/' << diff.second << endl;
-    // cout << sum.first << '/' << sum.second << endl;
     startLoop();
 
     return 0;
