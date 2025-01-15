@@ -195,6 +195,29 @@ bool contains(pair<int, int> element, vector<pair<int, int>> possibleRoots)
             return true;
     return false;
 }
+
+void replaceZeroDenominators(vector<pair<int, int>> &coefficients)
+{
+    for (int i = 0; i < coefficients.size(); i++)
+        if (coefficients[i].second == 0)
+            coefficients[i] = {0, 1};
+}
+
+void removeLastZeroes(vector<pair<int, int>> &coefficients)
+{
+    int indexesToBeRemoved = 0;
+    int coefficientSize = coefficients.size();
+    for (int i = 0; i < coefficientSize; i++)
+        if (coefficients[coefficientSize - 1 - i].first == 0)
+            indexesToBeRemoved++;
+        else
+            break;
+    vector<pair<int, int>> cleanedCoefficients(coefficientSize - indexesToBeRemoved);
+    for(int i=0; i<cleanedCoefficients.size(); i++)
+        cleanedCoefficients[i]=coefficients[i];
+    coefficients = cleanedCoefficients;
+}
+
 class Polynomial
 {
 private:
@@ -252,8 +275,9 @@ public:
         int thisSize = coefficients.size();
         int otherSize = other.getCoefficients().size();
         vector<pair<int, int>> multipliedCoefficients(thisSize + otherSize - 1);
-        for (int i = 0; i < multipliedCoefficients.size(); i++)
-            multipliedCoefficients[i] = {0, 1};
+        // for (int i = 0; i < multipliedCoefficients.size(); i++)
+        //     multipliedCoefficients[i] = {0, 1};
+        replaceZeroDenominators(multipliedCoefficients);
         for (int i = 0; i < coefficients.size(); i++)
             for (int j = 0; j < other.coefficients.size(); j++)
             {
@@ -263,6 +287,37 @@ public:
                 multipliedCoefficients[i + j] = addFractions(multipliedCoefficients[i + j], multipliedValue);
             }
         return Polynomial(multipliedCoefficients);
+    }
+
+    Polynomial divide(Polynomial divisor)
+    {
+        vector<pair<int, int>> divisorCoefficients = divisor.getCoefficients();
+        Polynomial dividend(coefficients);
+        vector<pair<int, int>> dividendCoefficients = dividend.getCoefficients();
+
+        int dividendSize = dividendCoefficients.size();
+        int divisorSize = divisorCoefficients.size();
+        int quotientSize = dividendCoefficients.size() - divisorCoefficients.size() + 1;
+
+        vector<pair<int, int>> quotient(quotientSize);
+
+        for (int i = 0; i < quotientSize; i++)
+        {
+            quotient[quotientSize - 1 - i] = divideFractions(dividendCoefficients[dividendSize - 1], divisorCoefficients[divisorSize - 1]);
+            vector<pair<int, int>> tempCoefficients(dividendSize);
+            for (int j = 0; j < dividendSize; j++)
+                tempCoefficients[dividendSize - 1 - j] = multiplyFractions(quotient[quotientSize - 1 - i], divisorCoefficients[divisorSize - 1 - j]);
+            replaceZeroDenominators(tempCoefficients);
+            Polynomial tempPolynomial(tempCoefficients);
+            dividend = dividend.subtract(tempPolynomial);
+            dividendCoefficients = dividend.getCoefficients();
+            removeLastZeroes(dividendCoefficients);
+            dividend = Polynomial(dividendCoefficients);
+            dividendSize = dividendCoefficients.size();
+            if(dividendSize<divisorSize)
+                return Polynomial(quotient);
+        }
+        return Polynomial(coefficients);
     }
 
     pair<int, int> powFraction(pair<int, int> fraction, int n)
@@ -302,24 +357,14 @@ public:
         return roots;
     }
 
-    // vector<pair<int, int>> possibleRoots()
-    // {
-    //     vector<pair<int, int>> roots();
-    //     pair<int, int> lastCoefficient = coefficients[coefficients.size() - 1];
-    //     pair<int, int> firstCoefficient = coefficients[0];
+    // vector<pair<int, int>> roots(){
+    //     vector<pair<int, int>> rootsVector;
+    //     vector<pair<int, int>> possibles = possibleRoots();
+    //     for(int i=0; i<possibles.size(); i++)
+    //         if(valueForX(possibles[i])==0){
 
-    //     for (int i = 0; i <= closestLowerInteger(coefficients[coefficients.size() - 1]); i++)
-    //     {
-    //         pair<int, int> lastCoefficientDivisor;
-    //         if (i == 0)
-    //             if (lastCoefficient.second != 1)
-    //                 lastCoefficientDivisor = lastCoefficient;
-    //     }
-    // }
-
-    // vector<pair<int, int>> roots()
-    // {
-    //     vector<pair<int, int>> roots;
+    //         }
+    //     return rootsVector;
     // }
 
     void print()
@@ -372,12 +417,15 @@ void startLoop()
 {
     cout << "give polynomial" << endl;
     Polynomial firstPolynomial = askForPolynomial();
+    Polynomial secondsPolynomial = askForPolynomial();
+    Polynomial quotient = firstPolynomial.divide(secondsPolynomial);
+    quotient.print();
     // vector<pair<int, int>> dividers = divisors({9, 2});
     // vector<pair<int, int>> dividers2 = divisors({3, 2});
-    vector<pair<int, int>> roots = firstPolynomial.possibleRoots();
-    for(int i=0; i<roots.size(); i++){
-        cout << roots[i].first << '/' << roots[i].second << ", ";
-    }
+    // vector<pair<int, int>> roots = firstPolynomial.possibleRoots();
+    // for(int i=0; i<roots.size(); i++){
+    //     cout << roots[i].first << '/' << roots[i].second << ", ";
+    // }
 
     // for (int i = 0; i < dividers.size(); i++)
     //     cout << dividers[i].first << "/" << dividers[i].second << " ,";
@@ -385,7 +433,6 @@ void startLoop()
     // for (int i = 0; i < dividers2.size(); i++)
     //     cout << dividers2[i].first << "/" << dividers2[i].second << " ,";
     // cout << endl;
-
 
     // Polynomial secondPolynomial = askForPolynomial();
 
@@ -396,16 +443,6 @@ void startLoop()
     // Polynomial subtractedPolynomial = firstPolynomial.subtract(secondPolynomial);
     // Polynomial multipliedPolynomial = firstPolynomial.multiply(secondPolynomial);
     // Polynomial dividedPolynomial = firstPolynomial.divide(secondPolynomial);
-
-    // Polynomial summedPolynomial = firstPolynomial.add(secondPolynomial);
-    // Polynomial summedPolynomial = firstPolynomial.add(secondPolynomial);
-    // vector<char> factor = {'7','.','5','/','1'};
-    // Polynomial factored = firstPolynomial.multiply(pair{parseCoefficient(factor)});
-    // factored.print();
-    // summedPolynomial.print();
-    // subtractedPolynomial.print();
-    // multipliedPolynomial.print();
-    // dividedPolynomial.print();
 
     /*  if 1, 2, 3, 4, 7
      give polynomial
