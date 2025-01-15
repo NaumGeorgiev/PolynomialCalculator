@@ -76,8 +76,8 @@ pair<int, int> parseCoefficient(const vector<char> &coefficient)
     int parsedNumerator = toInt(numerator);
     int parsedDenominator = toInt(denominator);
 
-    parsedNumerator*=pow(10, higher-numeratorDecimalDigitCount);
-    parsedDenominator*=pow(10, higher-denominatorDecimalDigitCount);
+    parsedNumerator *= pow(10, higher - numeratorDecimalDigitCount);
+    parsedDenominator *= pow(10, higher - denominatorDecimalDigitCount);
 
     return pair{parsedNumerator, parsedDenominator};
 }
@@ -166,6 +166,26 @@ pair<int, int> divideFractions(pair<int, int> a, pair<int, int> b)
     quotient.second = a.second * b.first;
     simplify(quotient);
     return quotient;
+}
+
+vector<pair<int, int>> possibleRoots(pair<int, int> fraction)
+{
+    vector<pair<int, int>> divisors;
+    int numerator = fraction.first;
+    int denominator = fraction.second;
+    for (int i = 1; i <= numerator; i++) // 3/7
+    {
+        if (numerator % i != 0)
+            continue;
+        for (int j = 1; j <= denominator; j++)
+        {
+            if (denominator % j != 0)
+                continue;
+            divisors.push_back({j, i});
+            divisors.push_back({-j, i});
+        }
+    }
+    return divisors;
 }
 
 class Polynomial
@@ -260,6 +280,26 @@ public:
         return Polynomial(coefficients);
     }
 
+    // vector<pair<int, int>> possibleRoots()
+    // {
+    //     vector<pair<int, int>> roots();
+    //     pair<int, int> lastCoefficient = coefficients[coefficients.size() - 1];
+    //     pair<int, int> firstCoefficient = coefficients[0];
+
+    //     for (int i = 0; i <= closestLowerInteger(coefficients[coefficients.size() - 1]); i++)
+    //     {
+    //         pair<int, int> lastCoefficientDivisor;
+    //         if (i == 0)
+    //             if (lastCoefficient.second != 1)
+    //                 lastCoefficientDivisor = lastCoefficient;
+    //     }
+    // }
+
+    // vector<pair<int, int>> roots()
+    // {
+    //     vector<pair<int, int>> roots;
+    // }
+
     void print()
     {
 
@@ -309,10 +349,12 @@ Polynomial askForPolynomial()
 void startLoop()
 {
     cout << "give polynomial" << endl;
-    Polynomial firstPolynomial = askForPolynomial();
-    // Polynomial secondPolynomial = askForPolynomial();
+    // Polynomial firstPolynomial = askForPolynomial();
+    vector<pair<int, int>> dividers = divisors({15, 4});
+    for(int i=0; i<dividers.size(); i++)
+        cout << dividers[i].first << "/" << dividers[i].second << " ,";
 
-    firstPolynomial.print();
+    // Polynomial secondPolynomial = askForPolynomial();
 
     // pair<int, int> value = firstPolynomial.valueForX(pair{2.5, 1});
     // cout << value.first << '/' << value.second;
