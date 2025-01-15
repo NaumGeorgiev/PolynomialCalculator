@@ -29,6 +29,7 @@ vector<char> getNumerator(const vector<char> &coefficient)
         numerator.push_back(coefficient[i]);
     return numerator;
 }
+
 vector<char> getDenominator(const vector<char> &coefficient)
 {
     int start = 0;
@@ -182,7 +183,7 @@ vector<pair<int, int>> divisors(pair<int, int> fraction)
             if (denominator % j != 0)
                 continue;
             divisors.push_back({i, j});
-            // divisors.push_back({-i, j});
+            divisors.push_back({-i, j});
         }
     }
     return divisors;
@@ -351,10 +352,10 @@ public:
         vector<pair<int, int>> roots;
         vector<pair<int, int>> l = divisors(coefficients[coefficients.size() - 1]);
         vector<pair<int, int>> f = divisors(coefficients[0]);
-        for (int i = 0; i < l.size(); i++)
-            for (int j = 0; j < f.size(); j++)
+        for (int i = 0; i < f.size(); i++)
+            for (int j = 0; j < l.size(); j++)
             {
-                pair<int, int> possibleRoot = divideFractions(l[i], f[j]);
+                pair<int, int> possibleRoot = divideFractions(f[i], l[j]);
                 if (!contains(possibleRoot, roots))
                     roots.push_back(possibleRoot);
             }
@@ -365,18 +366,25 @@ public:
     {
         Polynomial toBeSubtracted = divisor.multiply(quotient);
         Polynomial toBeReturned = subtract(toBeSubtracted);
-            return toBeReturned.removedLastZeros();
+        return toBeReturned.removedLastZeros();
     }
 
-    // vector<pair<int, int>> roots(){
-    //     vector<pair<int, int>> rootsVector;
-    //     vector<pair<int, int>> possibles = possibleRoots();
-    //     for(int i=0; i<possibles.size(); i++)
-    //         if(valueForX(possibles[i])==0){
-
-    //         }
-    //     return rootsVector;
-    // }
+    vector<pair<int, int>> roots()
+    {
+        Polynomial substitute(coefficients);
+        vector<pair<int, int>> rootsVector;
+        vector<pair<int, int>> possibles = substitute.possibleRoots();
+        for (int i = 0; i < possibles.size(); i++)
+            if (substitute.valueForX(possibles[i]).first == 0)
+            {
+                pair<int, int> root = possibles[i];
+                rootsVector.push_back(root);
+                root.first *= -1;
+                substitute = substitute.divide(Polynomial({root, {1, 1}}));
+                i--;
+            }
+        return rootsVector;
+    }
 
     void print()
     {
@@ -428,11 +436,15 @@ void startLoop()
 {
     cout << "give polynomial" << endl;
     Polynomial firstPolynomial = askForPolynomial();
-    Polynomial secondPolynomial = askForPolynomial();
-    Polynomial quotient = firstPolynomial.divide(secondPolynomial);
-    Polynomial remainder = firstPolynomial.remainder(secondPolynomial, quotient);
-    quotient.print();
-    remainder.print();
+    // Polynomial secondPolynomial = askForPolynomial();
+    // Polynomial quotient = firstPolynomial.divide(secondPolynomial);
+    // Polynomial remainder = firstPolynomial.remainder(secondPolynomial, quotient);
+    // quotient.print();
+    // remainder.print();
+
+    vector<pair<int, int>> roots = firstPolynomial.roots();
+    for(int i=0; i<roots.size(); i++)
+        cout << roots[i].first << '/' << roots[i].second << ", ";
 
     // for (int i = 0; i < dividers.siz
     /*  if 1, 2, 3, 4, 7
