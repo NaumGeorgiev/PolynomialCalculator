@@ -213,8 +213,8 @@ void removeLastZeroes(vector<pair<int, int>> &coefficients)
         else
             break;
     vector<pair<int, int>> cleanedCoefficients(coefficientSize - indexesToBeRemoved);
-    for(int i=0; i<cleanedCoefficients.size(); i++)
-        cleanedCoefficients[i]=coefficients[i];
+    for (int i = 0; i < cleanedCoefficients.size(); i++)
+        cleanedCoefficients[i] = coefficients[i];
     coefficients = cleanedCoefficients;
 }
 
@@ -314,7 +314,7 @@ public:
             removeLastZeroes(dividendCoefficients);
             dividend = Polynomial(dividendCoefficients);
             dividendSize = dividendCoefficients.size();
-            if(dividendSize<divisorSize)
+            if (dividendSize < divisorSize)
                 return Polynomial(quotient);
         }
         return Polynomial(coefficients);
@@ -355,6 +355,12 @@ public:
                     roots.push_back(possibleRoot);
             }
         return roots;
+    }
+
+    Polynomial remainder(Polynomial divisor, Polynomial quotient)
+    {
+        Polynomial toBeSubtracted = divisor.multiply(quotient);
+        return subtract(toBeSubtracted);
     }
 
     // vector<pair<int, int>> roots(){
@@ -417,33 +423,13 @@ void startLoop()
 {
     cout << "give polynomial" << endl;
     Polynomial firstPolynomial = askForPolynomial();
-    Polynomial secondsPolynomial = askForPolynomial();
-    Polynomial quotient = firstPolynomial.divide(secondsPolynomial);
+    Polynomial secondPolynomial = askForPolynomial();
+    Polynomial quotient = firstPolynomial.divide(secondPolynomial);
+    Polynomial remainder = firstPolynomial.remainder(secondPolynomial, quotient);
     quotient.print();
-    // vector<pair<int, int>> dividers = divisors({9, 2});
-    // vector<pair<int, int>> dividers2 = divisors({3, 2});
-    // vector<pair<int, int>> roots = firstPolynomial.possibleRoots();
-    // for(int i=0; i<roots.size(); i++){
-    //     cout << roots[i].first << '/' << roots[i].second << ", ";
-    // }
+    remainder.print();
 
-    // for (int i = 0; i < dividers.size(); i++)
-    //     cout << dividers[i].first << "/" << dividers[i].second << " ,";
-    // cout << endl;
-    // for (int i = 0; i < dividers2.size(); i++)
-    //     cout << dividers2[i].first << "/" << dividers2[i].second << " ,";
-    // cout << endl;
-
-    // Polynomial secondPolynomial = askForPolynomial();
-
-    // pair<int, int> value = firstPolynomial.valueForX(pair{2.5, 1});
-    // cout << value.first << '/' << value.second;
-
-    // Polynomial summedPolynomial = firstPolynomial.add(secondPolynomial);
-    // Polynomial subtractedPolynomial = firstPolynomial.subtract(secondPolynomial);
-    // Polynomial multipliedPolynomial = firstPolynomial.multiply(secondPolynomial);
-    // Polynomial dividedPolynomial = firstPolynomial.divide(secondPolynomial);
-
+    // for (int i = 0; i < dividers.siz
     /*  if 1, 2, 3, 4, 7
      give polynomial
      if 5, 6
