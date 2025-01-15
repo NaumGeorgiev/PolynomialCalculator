@@ -356,6 +356,10 @@ public:
             for (int j = 0; j < l.size(); j++)
             {
                 pair<int, int> possibleRoot = divideFractions(f[i], l[j]);
+                if(possibleRoot.second<0){
+                    possibleRoot.second*=-1;
+                    possibleRoot.first*=-1;
+                }
                 if (!contains(possibleRoot, roots))
                     roots.push_back(possibleRoot);
             }
