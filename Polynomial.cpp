@@ -327,38 +327,6 @@ public:
         }
     }
 
-    // Polynomial divide(Polynomial divisor)
-    // {
-    //     vector<pair<int, int>> divisorCoefficients = divisor.getCoefficients();
-    //     Polynomial dividend(coefficients);
-    //     vector<pair<int, int>> dividendCoefficients = dividend.getCoefficients();
-
-    //     int dividendSize = dividendCoefficients.size();
-    //     int divisorSize = divisorCoefficients.size();
-    //     int quotientSize = dividendCoefficients.size() - divisorCoefficients.size() + 1;
-    //     if (dividendSize < divisorSize)
-    //     {
-    //         return Polynomial({{0, 1}});
-    //     }
-    //     vector<pair<int, int>> quotient(quotientSize);
-
-    //     for (int i = 0; i < quotientSize; i++)
-    //     {
-    //         quotient[quotientSize - 1 - i] = divideFractions(dividendCoefficients[dividendSize - 1], divisorCoefficients[divisorSize - 1]);
-    //         vector<pair<int, int>> tempCoefficients(dividendSize);
-    //         for (int j = 0; j < dividendSize; j++)
-    //             tempCoefficients[dividendSize - 1 - j] = multiplyFractions(quotient[quotientSize - 1 - i], divisorCoefficients[divisorSize - 1 - j]);
-    //         replaceZeroDenominators(tempCoefficients);
-    //         Polynomial tempPolynomial(tempCoefficients);
-    //         dividend = dividend.subtract(tempPolynomial);
-    //         dividendCoefficients = dividend.getCoefficients();
-    //         dividend.removedLastZeros();
-    //         dividendSize = dividendCoefficients.size();
-    //         if (dividendSize < divisorSize)
-    //             return Polynomial(quotient).removedLastZeros();
-    //     }
-    // }
-
     pair<int, int> powFraction(pair<int, int> fraction, int n)
     {
         fraction.first = pow(fraction.first, n);
@@ -466,6 +434,19 @@ public:
         }
     }
 
+    Polynomial findGCD(Polynomial divisor){
+        Polynomial dividend(coefficients);
+        while(true){
+        Polynomial quotient = dividend.divide(divisor);
+        Polynomial remaind = dividend.remainder(divisor, quotient);
+        if(remaind.getCoefficients().size() == 0)
+            return divisor;
+        dividend = divisor;
+        divisor = remaind;
+        }
+        
+    }
+
     void print()
     {
 
@@ -516,14 +497,20 @@ void startLoop()
 {
     cout << "give polynomial" << endl;
     Polynomial firstPolynomial = askForPolynomial();
-    // Polynomial secondPolynomial = askForPolynomial();
+    Polynomial secondPolynomial = askForPolynomial();
     // Polynomial quotient = firstPolynomial.divide(secondPolynomial);
     // Polynomial remainder = firstPolynomial.remainder(secondPolynomial, quotient);
     // quotient.print();
     // remainder.print();
+    firstPolynomial.print();
+    secondPolynomial.print();
+    // Polynomial gcd = firstPolynomial.findGCD(secondPolynomial);
+    // gcd.print();
 
-    vector<pair<int, int>> roots = firstPolynomial.roots();
-    firstPolynomial.printDecomposition(roots);
+    // vector<pair<int, int>> roots = firstPolynomial.roots();
+    // firstPolynomial.print();
+
+    // firstPolynomial.printDecomposition(roots);
 
     // for (int i = 0; i < dividers.siz
     /*  if 1, 2, 3, 4, 7
