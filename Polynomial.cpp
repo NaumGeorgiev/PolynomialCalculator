@@ -59,10 +59,20 @@ int getDecimalDigitCount(const vector<char> &number)
 
 int toInt(const vector<char> &number)
 {
+    bool isNegative = false;
     int result = 0;
     for (int i = 0; i < number.size(); i++)
         if (number[i] != '.')
+        {
+            if (number[i] == '-')
+            {
+                isNegative = true;
+                continue;
+            }
             result = result * 10 + (number[i] - '0');
+        }
+    if (isNegative)
+        result *= -1;
     return result;
 }
 
@@ -414,7 +424,7 @@ public:
                 cout << 'x';
             else if (denominator == 1)
                 if (numerator < 0)
-                    cout << "(x + " << numerator*(-1) << ')';
+                    cout << "(x + " << numerator * (-1) << ')';
                 else
                     cout << "(x - " << numerator << ')';
             else if (numerator < 0)
@@ -434,22 +444,24 @@ public:
         }
     }
 
-    Polynomial findGCD(Polynomial divisor){
+    Polynomial findGCD(Polynomial divisor)
+    {
         Polynomial dividend(coefficients);
-        if(coefficients.size() < divisor.getCoefficients().size()){
+        if (coefficients.size() < divisor.getCoefficients().size())
+        {
             Polynomial temp = dividend;
             dividend = divisor;
             divisor = temp;
         }
-        while(true){
-        Polynomial quotient = dividend.divide(divisor);
-        Polynomial remaind = dividend.remainder(divisor, quotient);
-        if(remaind.getCoefficients().size() == 0)
-            return divisor;
-        dividend = divisor;
-        divisor = remaind;
+        while (true)
+        {
+            Polynomial quotient = dividend.divide(divisor);
+            Polynomial remaind = dividend.remainder(divisor, quotient);
+            if (remaind.getCoefficients().size() == 0)
+                return divisor;
+            dividend = divisor;
+            divisor = remaind;
         }
-        
     }
 
     void print()
@@ -507,10 +519,10 @@ void startLoop()
     // Polynomial remainder = firstPolynomial.remainder(secondPolynomial, quotient);
     // quotient.print();
     // remainder.print();
-    firstPolynomial.print();
-    secondPolynomial.print();
-    // Polynomial gcd = firstPolynomial.findGCD(secondPolynomial);
-    // gcd.print();
+    // firstPolynomial.print();
+    // secondPolynomial.print();
+    Polynomial gcd = firstPolynomial.findGCD(secondPolynomial);
+    gcd.print();
 
     // vector<pair<int, int>> roots = firstPolynomial.roots();
     // firstPolynomial.print();
