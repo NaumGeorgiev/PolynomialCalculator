@@ -436,6 +436,11 @@ public:
 
     Polynomial findGCD(Polynomial divisor){
         Polynomial dividend(coefficients);
+        if(coefficients.size() < divisor.getCoefficients().size()){
+            Polynomial temp = dividend;
+            dividend = divisor;
+            divisor = temp;
+        }
         while(true){
         Polynomial quotient = dividend.divide(divisor);
         Polynomial remaind = dividend.remainder(divisor, quotient);
