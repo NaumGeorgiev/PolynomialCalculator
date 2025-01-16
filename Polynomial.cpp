@@ -444,6 +444,14 @@ public:
         }
     }
 
+    Polynomial divide(pair<int, int> divisor)
+    {
+        pair<int, int> factor;
+        factor.first = divisor.second;
+        factor.second = divisor.first;
+        return multiply(factor);
+    }
+
     Polynomial findGCD(Polynomial divisor)
     {
         Polynomial dividend(coefficients);
@@ -458,7 +466,7 @@ public:
             Polynomial quotient = dividend.divide(divisor);
             Polynomial remaind = dividend.remainder(divisor, quotient);
             if (remaind.getCoefficients().size() == 0)
-                return divisor;
+                return divisor.divide(divisor.getCoefficientAt(divisor.getCoefficients().size() -1));
             dividend = divisor;
             divisor = remaind;
         }
