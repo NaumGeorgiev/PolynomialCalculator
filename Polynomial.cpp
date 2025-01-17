@@ -585,6 +585,8 @@ void startLoop()
         cout << endl;
 
         Polynomial anotherPolinomial({{0, 0}});
+        Polynomial fractionContainer({{0, 0}});
+        pair<int, int> fraction;
         if (option == 1 || option == 2 || option == 3 || option == 4 || option == 7)
         {
             cout << "Type second polinomial's coefficients" << endl
@@ -593,6 +595,14 @@ void startLoop()
             cout << "Your second polinomial:" << endl;
             anotherPolinomial.print();
             cout << endl;
+        }
+
+        else if (option == 5 || option == 6 || option == 9)
+        {
+            cout << "Type rational number" << endl
+                 << endl;
+            fractionContainer = askForPolynomial();
+            fraction = fractionContainer.getCoefficientAt(0);
         }
 
         switch (option)
@@ -630,8 +640,7 @@ void startLoop()
         case 4:
         {
             Polynomial quotient = polinomial.divide(anotherPolinomial);
-            cout << "Quotient:" << endl
-                 << endl;
+            cout << "Quotient:" << endl;
             quotient.print();
             Polynomial remainde = polinomial.remainder(anotherPolinomial, quotient);
             cout << "remainder:" << endl;
@@ -643,10 +652,6 @@ void startLoop()
         }
         case 5:
         {
-            cout << "Type rational number" << endl
-                 << endl;
-            Polynomial fractionContainer = askForPolynomial();
-            pair<int, int> fraction = fractionContainer.getCoefficientAt(0);
             Polynomial product = polinomial.multiply(fraction);
             cout << endl
                  << "Product:" << endl;
@@ -655,10 +660,6 @@ void startLoop()
         }
         case 6:
         {
-            cout << "Type rational number" << endl
-                 << endl;
-            Polynomial fractionContainer = askForPolynomial();
-            pair<int, int> fraction = fractionContainer.getCoefficientAt(0);
             pair<int, int> valueForX = polinomial.valueForX(fraction);
             cout << endl
                  << "Value:" << endl;
@@ -677,10 +678,6 @@ void startLoop()
         }
         case 9:
         {
-            cout << "Type rational number" << endl
-                 << endl;
-            Polynomial fractionContainer = askForPolynomial();
-            pair<int, int> fraction = fractionContainer.getCoefficientAt(0);
             Polynomial withChangedArgument = polinomial.changeArgument(fraction);
             cout << endl
                  << "New polinomial:" << endl;
