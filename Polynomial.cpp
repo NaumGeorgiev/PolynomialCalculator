@@ -78,9 +78,9 @@ int toInt(const vector<char> &number)
 
 pair<int, int> parseCoefficient(const vector<char> &coefficient)
 {
-    vector<char> numerator = getNumerator(coefficient);
-    vector<char> denominator = getDenominator(coefficient);
-    int numeratorDecimalDigitCount = getDecimalDigitCount(numerator);
+    const vector<char> numerator = getNumerator(coefficient);
+    const vector<char> denominator = getDenominator(coefficient);
+    const int numeratorDecimalDigitCount = getDecimalDigitCount(numerator);
     const int denominatorDecimalDigitCount = getDecimalDigitCount(denominator);
     const int higher = max(numeratorDecimalDigitCount, denominatorDecimalDigitCount);
 
@@ -114,7 +114,7 @@ int findGCD(int a, int b)
     return a;
 }
 
-int findLCD(int a, int b)
+int findLCD(const int a, const int b)
 {
     int gcd = findGCD(a, b);
     return a * b / gcd;
@@ -122,11 +122,11 @@ int findLCD(int a, int b)
 
 void rewriteWithCommonDenominators(pair<int, int> &a, pair<int, int> &b)
 {
-    int denominatorA = a.second;
-    int denominatorB = b.second;
-    int lcd = findLCD(denominatorA, denominatorB);
-    int multiplicatorA = lcd / denominatorA;
-    int multiplicatorB = lcd / denominatorB;
+    const int denominatorA = a.second;
+    const int denominatorB = b.second;
+    const int lcd = findLCD(denominatorA, denominatorB);
+    const int multiplicatorA = lcd / denominatorA;
+    const int multiplicatorB = lcd / denominatorB;
 
     a.first *= multiplicatorA;
     a.second *= multiplicatorA;
@@ -136,12 +136,12 @@ void rewriteWithCommonDenominators(pair<int, int> &a, pair<int, int> &b)
 
 void simplify(pair<int, int> &fraction)
 {
-    int gcd = findGCD(fraction.first, fraction.second);
+    const int gcd = findGCD(fraction.first, fraction.second);
     fraction.first /= gcd;
     fraction.second /= gcd;
 }
 
-pair<int, int> addFractions(pair<int, int> a, pair<int, int> b)
+pair<int, int> addFractions(pair<int, int> a, pair<int, int> b) // TODO unite methods
 {
     rewriteWithCommonDenominators(a, b);
     pair<int, int> sum;
@@ -179,7 +179,7 @@ pair<int, int> divideFractions(pair<int, int> a, pair<int, int> b)
     return quotient;
 }
 
-vector<pair<int, int>> divisors(pair<int, int> fraction)
+vector<pair<int, int>> divisors(const pair<int, int> &fraction)
 {
     vector<pair<int, int>> divisors;
     int numerator = fraction.first;
@@ -199,7 +199,7 @@ vector<pair<int, int>> divisors(pair<int, int> fraction)
     return divisors;
 }
 
-bool contains(pair<int, int> element, vector<pair<int, int>> possibleRoots)
+bool contains(const pair<int, int> &element, const vector<pair<int, int>> &possibleRoots)
 {
     for (int i = 0; i < possibleRoots.size(); i++)
         if (possibleRoots[i] == element)
@@ -240,7 +240,7 @@ public:
         this->coefficients = coefficients;
     }
 
-    const vector<pair<int, int>> &getCoefficients()
+    vector<pair<int, int>> getCoefficients()
     {
         return coefficients;
     }
@@ -257,16 +257,16 @@ public:
 
     Polynomial multiply(Polynomial &other)
     {
-        int thisSize = coefficients.size();
-        int otherSize = other.getCoefficients().size();
+        const int thisSize = coefficients.size();
+        const int otherSize = other.getCoefficients().size();
         vector<pair<int, int>> multipliedCoefficients(thisSize + otherSize - 1);
         replaceZeroDenominators(multipliedCoefficients);
         for (int i = 0; i < coefficients.size(); i++)
             for (int j = 0; j < other.coefficients.size(); j++)
             {
-                pair<int, int> thisValue = getCoefficientAt(i);
-                pair<int, int> otherValue = other.getCoefficientAt(j);
-                pair<int, int> multipliedValue = multiplyFractions(thisValue, otherValue);
+                const pair<int, int> thisValue = getCoefficientAt(i);
+                const pair<int, int> otherValue = other.getCoefficientAt(j);
+                const pair<int, int> multipliedValue = multiplyFractions(thisValue, otherValue);
                 multipliedCoefficients[i + j] = addFractions(multipliedCoefficients[i + j], multipliedValue);
             }
         return Polynomial(multipliedCoefficients).removedLastZeros();
@@ -274,13 +274,13 @@ public:
 
     Polynomial divide(Polynomial divisor)
     {
-        vector<pair<int, int>> divisorCoefficients = divisor.getCoefficients();
+        const vector<pair<int, int>> divisorCoefficients = divisor.getCoefficients();
         Polynomial dividend(coefficients);
         vector<pair<int, int>> dividendCoefficients = dividend.getCoefficients();
 
         int dividendSize = dividendCoefficients.size();
         int divisorSize = divisorCoefficients.size();
-        int quotientSize = dividendCoefficients.size() - divisorCoefficients.size() + 1;
+        const int quotientSize = dividendCoefficients.size() - divisorCoefficients.size() + 1;
         if (dividendSize < divisorSize)
         {
             return Polynomial({{0, 1}});
@@ -304,7 +304,7 @@ public:
         }
     }
 
-    pair<int, int> valueForX(pair<int, int> x)
+    pair<int, int> valueForX(const pair<int, int> &x)
     {
         pair<int, int> value = {0, 1};
         for (int i = 0; i < coefficients.size(); i++)
@@ -312,7 +312,7 @@ public:
         return value;
     }
 
-    Polynomial multiply(pair<int, int> factor)
+    Polynomial multiply(const pair<int, int> &factor)
     {
         for (int i = 0; i < coefficients.size(); i++)
             coefficients[i] = multiplyFractions(coefficients[i], factor);
@@ -331,7 +331,7 @@ public:
         Polynomial substitute(coefficients);
         substitute = substitute.removedLastZeros();
         vector<pair<int, int>> rootsVector;
-        vector<pair<int, int>> possibles = substitute.possibleRoots();
+        const vector<pair<int, int>> possibles = substitute.possibleRoots();
         for (int i = 0; i < possibles.size(); i++)
             if (substitute.valueForX(possibles[i]).first == 0)
             {
@@ -344,13 +344,12 @@ public:
         return rootsVector;
     }
 
-    void printDecomposition(vector<pair<int, int>> roots)
+    void printDecomposition(const vector<pair<int, int>> &roots)
     {
-
         for (int i = 0; i < roots.size(); i++)
         {
-            int numerator = roots[i].first;
-            int denominator = roots[i].second;
+            const int numerator = roots[i].first;
+            const int denominator = roots[i].second;
             if (numerator == 0)
                 cout << 'x';
             else if (denominator == 1)
@@ -395,7 +394,7 @@ public:
         }
     }
 
-    void printVietasFormulas()
+    void printVietasFormulas() // TODO the whole method
     {
         int n = 4;
         for (int i = 1; i <= 2; i++)
@@ -413,9 +412,9 @@ public:
         }
     }
 
-    Polynomial changeArgument(pair<int, int> addend)
+    Polynomial changeArgument(const pair<int, int> &addend)
     {
-        int polynomialSize = coefficients.size();
+        const int polynomialSize = coefficients.size();
         vector<pair<int, int>> toBeReturnedCoefficients(polynomialSize);
         toBeReturnedCoefficients[0] = coefficients[0];
         replaceZeroDenominators(toBeReturnedCoefficients);
@@ -436,8 +435,8 @@ public:
 
         for (int i = 0; i < coefficients.size(); i++)
         {
-            int numerator = coefficients[i].first;
-            int denominator = coefficients[i].second;
+            const int numerator = coefficients[i].first;
+            const int denominator = coefficients[i].second;
             if (denominator == 1)
                 cout << numerator;
             else
@@ -454,7 +453,7 @@ public:
         cout << endl;
     }
 
-    pair<int, int> getCoefficientAt(int index)
+    pair<int, int> getCoefficientAt(const int &index)
     {
         if (index < coefficients.size())
             return coefficients[index];
@@ -464,9 +463,9 @@ public:
 private:
     Polynomial operateWith(Polynomial other, char function)
     {
-        int thisSize = coefficients.size();
-        int otherSize = other.getCoefficients().size();
-        int higherSize = max(thisSize, otherSize);
+        const int thisSize = coefficients.size();
+        const int otherSize = other.getCoefficients().size();
+        const int higherSize = max(thisSize, otherSize);
 
         vector<pair<int, int>> summedCoefficients;
         for (int i = 0; i < higherSize; i++)
@@ -488,7 +487,7 @@ private:
         return Polynomial(removedLastZerosCoefficient);
     }
 
-    pair<int, int> powFraction(pair<int, int> fraction, int n)
+    pair<int, int> powFraction(pair<int, int> fraction, const int &n)
     {
         fraction.first = pow(fraction.first, n);
         fraction.second = pow(fraction.second, n);
@@ -507,8 +506,8 @@ private:
             return roots;
         }
         // let l = lastCoefficientDivisors and f = firstCoefficientDivisors
-        vector<pair<int, int>> l = divisors(coefficients[coefficients.size() - 1]);
-        vector<pair<int, int>> f = divisors(coefficients[0]);
+        const vector<pair<int, int>> l = divisors(coefficients[coefficients.size() - 1]);
+        const vector<pair<int, int>> f = divisors(coefficients[0]);
         for (int i = 0; i < f.size(); i++)
             for (int j = 0; j < l.size(); j++)
             {
@@ -524,7 +523,7 @@ private:
         return roots;
     }
 
-    Polynomial divide(pair<int, int> divisor)
+    Polynomial divide(const pair<int, int> &divisor)
     {
         pair<int, int> factor;
         factor.first = divisor.second;
@@ -548,7 +547,7 @@ vector<char> polynomialInput()
 
 Polynomial askForPolynomial()
 {
-    vector<char> input = polynomialInput();
+    const vector<char> input = polynomialInput();
     vector<pair<int, int>> coefficients = parseCoefficients(input);
     for (int i = 0; i < coefficients.size(); i++)
         simplify(coefficients[i]);
