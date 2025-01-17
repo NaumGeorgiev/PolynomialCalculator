@@ -184,7 +184,7 @@ vector<pair<int, int>> divisors(const pair<int, int> &fraction)
     vector<pair<int, int>> divisors;
     int numerator = fraction.first;
     int denominator = fraction.second;
-    for (int i = 1; i <= numerator; i++) // 3/7
+    for (int i = 1; i <= numerator; i++)
     {
         if (numerator % i != 0)
             continue;
