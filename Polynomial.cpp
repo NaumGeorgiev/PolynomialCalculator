@@ -573,26 +573,36 @@ void startLoop()
 
         int option;
         cin >> option;
-        cout << endl;
 
-        cout << "Type polinomial coefficients and then \"s\" when ending. For example:" << endl
+        cout << endl
+             << "Type polinomial coefficients and then \"s\" when ending. For example:" << endl
              << "\"1, 2, 1s\" would be: 1 + 2x + x^2" << endl
              << endl;
-        ;
+
         Polynomial polinomial = askForPolynomial();
         cout << "Your polinomial:" << endl;
         polinomial.print();
         cout << endl;
 
+        Polynomial anotherPolinomial({{0, 0}});
+        if (option == 1 || option == 2 || option == 3 || option == 4 || option == 7)
+        {
+            cout << "Type second polinomial's coefficients" << endl
+                 << endl;
+            anotherPolinomial = askForPolynomial();
+            cout << "Your second polinomial:" << endl;
+            anotherPolinomial.print();
+        }
+
         switch (option)
         {
         case 1:
         {
-            cout << "Type second polinomial's coefficients" << endl
-                 << endl;
-            Polynomial anotherPolinomial = askForPolynomial();
-            cout << "Your second polinomial:" << endl;
-            anotherPolinomial.print();
+            // cout << "Type second polinomial's coefficients" << endl
+            //      << endl;
+            // Polynomial anotherPolinomial = askForPolynomial();
+            // cout << "Your second polinomial:" << endl;
+            // anotherPolinomial.print();
             Polynomial sum = polinomial.add(anotherPolinomial);
             cout << endl
                  << "Sum:" << endl;
@@ -602,11 +612,11 @@ void startLoop()
         }
         case 2:
         {
-            cout << "Type second polinomial's coefficients" << endl
-                 << endl;
-            Polynomial anotherPolinomial = askForPolynomial();
-            cout << "Your second polinomial:" << endl;
-            anotherPolinomial.print();
+            // cout << "Type second polinomial's coefficients" << endl
+            //      << endl;
+            // Polynomial anotherPolinomial = askForPolynomial();
+            // cout << "Your second polinomial:" << endl;
+            // anotherPolinomial.print();
             Polynomial difference = polinomial.subtract(anotherPolinomial);
             cout << endl
                  << "Difference:" << endl;
@@ -618,11 +628,11 @@ void startLoop()
         }
         case 3:
         {
-            cout << "Type second polinomial's coefficients" << endl
-                 << endl;
-            Polynomial anotherPolinomial = askForPolynomial();
-            cout << "Your second polinomial:" << endl;
-            anotherPolinomial.print();
+            // cout << "Type second polinomial's coefficients" << endl
+            //      << endl;
+            // Polynomial anotherPolinomial = askForPolynomial();
+            // cout << "Your second polinomial:" << endl;
+            // anotherPolinomial.print();
             Polynomial product = polinomial.multiply(anotherPolinomial);
             cout << endl
                  << "Product:" << endl;
@@ -631,11 +641,11 @@ void startLoop()
         }
         case 4:
         {
-            cout << "Type second polinomial's coefficients" << endl
-                 << endl;
-            Polynomial anotherPolinomial = askForPolynomial();
-            cout << "Your second polinomial:" << endl;
-            anotherPolinomial.print();
+            // cout << "Type second polinomial's coefficients" << endl
+            //      << endl;
+            // Polynomial anotherPolinomial = askForPolynomial();
+            // cout << "Your second polinomial:" << endl;
+            // anotherPolinomial.print();
             Polynomial quotient = polinomial.divide(anotherPolinomial);
             cout << endl
                  << "Quotient:" << endl
@@ -677,40 +687,40 @@ void startLoop()
             break;
         }
         case 7:
-        {
-            cout << "Type second polinomial's coefficients" << endl
-                 << endl;
-            Polynomial anotherPolinomial = askForPolynomial();
+            {
+            //     cout << "Type second polinomial's coefficients" << endl
+            //          << endl;
+            // Polynomial anotherPolinomial = askForPolynomial();
             Polynomial gcd = polinomial.findGCD(anotherPolinomial);
             cout << endl
                  << "GCD:" << endl;
             gcd.print();
             break;
         }
-        case 9:
-        {
-            cout << "Type rational number" << endl
-                 << endl;
-            Polynomial fractionContainer = askForPolynomial();
-            pair<int, int> fraction = fractionContainer.getCoefficientAt(0);
-            Polynomial withChangedArgument = polinomial.changeArgument(fraction);
-            cout << endl
-                 << "New polinomial:" << endl;
-            withChangedArgument.print();
-            break;
-        }
-        case 10:
-        {
-            vector<pair<int, int>> root = polinomial.roots();
-            cout << endl
-                 << "Decomposition:" << endl;
-            polinomial.printDecomposition(root);
-            break;
-        }
-        }
-        cout << endl
+    case 9:
+    {
+        cout << "Type rational number" << endl
              << endl;
+        Polynomial fractionContainer = askForPolynomial();
+        pair<int, int> fraction = fractionContainer.getCoefficientAt(0);
+        Polynomial withChangedArgument = polinomial.changeArgument(fraction);
+        cout << endl
+             << "New polinomial:" << endl;
+        withChangedArgument.print();
+        break;
     }
+    case 10:
+    {
+        vector<pair<int, int>> root = polinomial.roots();
+        cout << endl
+             << "Decomposition:" << endl;
+        polinomial.printDecomposition(root);
+        break;
+    }
+    }
+    cout << endl
+         << endl;
+}
 }
 
 int main()
