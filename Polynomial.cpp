@@ -245,32 +245,6 @@ public:
         return coefficients;
     }
 
-    pair<int, int> getCoefficientAt(int index)
-    {
-        if (index < coefficients.size())
-            return coefficients[index];
-        return pair{0, 1};
-    }
-
-    Polynomial operateWith(Polynomial other, char function)
-    {
-        int thisSize = coefficients.size();
-        int otherSize = other.getCoefficients().size();
-        int higherSize = max(thisSize, otherSize);
-
-        vector<pair<int, int>> summedCoefficients;
-        for (int i = 0; i < higherSize; i++)
-        {
-            pair<int, int> thisValue = getCoefficientAt(i);
-            pair<int, int> otherValue = other.getCoefficientAt(i);
-            if (function == '+')
-                summedCoefficients.push_back(addFractions(thisValue, otherValue));
-            else if (function == '-')
-                summedCoefficients.push_back(subtractFractions(thisValue, otherValue));
-        }
-        return Polynomial(summedCoefficients).removedLastZeros();
-    }
-
     Polynomial add(Polynomial &other)
     {
         return operateWith(other, '+');
@@ -296,13 +270,6 @@ public:
                 multipliedCoefficients[i + j] = addFractions(multipliedCoefficients[i + j], multipliedValue);
             }
         return Polynomial(multipliedCoefficients).removedLastZeros();
-    }
-
-    Polynomial removedLastZeros()
-    {
-        vector<pair<int, int>> removedLastZerosCoefficient = coefficients;
-        removeLastZeros(removedLastZerosCoefficient);
-        return Polynomial(removedLastZerosCoefficient);
     }
 
     Polynomial divide(Polynomial divisor)
@@ -337,13 +304,6 @@ public:
         }
     }
 
-    pair<int, int> powFraction(pair<int, int> fraction, int n)
-    {
-        fraction.first = pow(fraction.first, n);
-        fraction.second = pow(fraction.second, n);
-        return fraction;
-    }
-
     pair<int, int> valueForX(pair<int, int> x)
     {
         pair<int, int> value = {0, 1};
@@ -357,35 +317,6 @@ public:
         for (int i = 0; i < coefficients.size(); i++)
             coefficients[i] = multiplyFractions(coefficients[i], factor);
         return Polynomial(coefficients).removedLastZeros();
-    }
-
-    vector<pair<int, int>> possibleRoots()
-    {
-        vector<pair<int, int>> roots;
-        if (coefficients.size() == 2)
-        {
-            pair<int, int> firstCoefficient = coefficients[0];
-            firstCoefficient.first *= -1;
-            pair<int, int> root = divideFractions(firstCoefficient, coefficients[1]);
-            roots.push_back(root);
-            return roots;
-        }
-        // let l = lastCoefficientDivisors and f = firstCoefficientDivisors
-        vector<pair<int, int>> l = divisors(coefficients[coefficients.size() - 1]);
-        vector<pair<int, int>> f = divisors(coefficients[0]);
-        for (int i = 0; i < f.size(); i++)
-            for (int j = 0; j < l.size(); j++)
-            {
-                pair<int, int> possibleRoot = divideFractions(f[i], l[j]);
-                if (possibleRoot.second < 0)
-                {
-                    possibleRoot.second *= -1;
-                    possibleRoot.first *= -1;
-                }
-                if (!contains(possibleRoot, roots))
-                    roots.push_back(possibleRoot);
-            }
-        return roots;
     }
 
     Polynomial remainder(Polynomial divisor, Polynomial quotient)
@@ -442,14 +373,6 @@ public:
                 i += degree - 1;
             }
         }
-    }
-
-    Polynomial divide(pair<int, int> divisor)
-    {
-        pair<int, int> factor;
-        factor.first = divisor.second;
-        factor.second = divisor.first;
-        return multiply(factor);
     }
 
     Polynomial findGCD(Polynomial divisor)
@@ -529,6 +452,85 @@ public:
                 cout << " + ";
         }
         cout << endl;
+    }
+
+    pair<int, int> getCoefficientAt(int index)
+    {
+        if (index < coefficients.size())
+            return coefficients[index];
+        return pair{0, 1};
+    }
+
+    private:
+
+    Polynomial operateWith(Polynomial other, char function)
+    {
+        int thisSize = coefficients.size();
+        int otherSize = other.getCoefficients().size();
+        int higherSize = max(thisSize, otherSize);
+
+        vector<pair<int, int>> summedCoefficients;
+        for (int i = 0; i < higherSize; i++)
+        {
+            pair<int, int> thisValue = getCoefficientAt(i);
+            pair<int, int> otherValue = other.getCoefficientAt(i);
+            if (function == '+')
+                summedCoefficients.push_back(addFractions(thisValue, otherValue));
+            else if (function == '-')
+                summedCoefficients.push_back(subtractFractions(thisValue, otherValue));
+        }
+        return Polynomial(summedCoefficients).removedLastZeros();
+    }
+
+    Polynomial removedLastZeros()
+    {
+        vector<pair<int, int>> removedLastZerosCoefficient = coefficients;
+        removeLastZeros(removedLastZerosCoefficient);
+        return Polynomial(removedLastZerosCoefficient);
+    }
+
+    pair<int, int> powFraction(pair<int, int> fraction, int n)
+    {
+        fraction.first = pow(fraction.first, n);
+        fraction.second = pow(fraction.second, n);
+        return fraction;
+    }
+
+    vector<pair<int, int>> possibleRoots()
+    {
+        vector<pair<int, int>> roots;
+        if (coefficients.size() == 2)
+        {
+            pair<int, int> firstCoefficient = coefficients[0];
+            firstCoefficient.first *= -1;
+            pair<int, int> root = divideFractions(firstCoefficient, coefficients[1]);
+            roots.push_back(root);
+            return roots;
+        }
+        // let l = lastCoefficientDivisors and f = firstCoefficientDivisors
+        vector<pair<int, int>> l = divisors(coefficients[coefficients.size() - 1]);
+        vector<pair<int, int>> f = divisors(coefficients[0]);
+        for (int i = 0; i < f.size(); i++)
+            for (int j = 0; j < l.size(); j++)
+            {
+                pair<int, int> possibleRoot = divideFractions(f[i], l[j]);
+                if (possibleRoot.second < 0)
+                {
+                    possibleRoot.second *= -1;
+                    possibleRoot.first *= -1;
+                }
+                if (!contains(possibleRoot, roots))
+                    roots.push_back(possibleRoot);
+            }
+        return roots;
+    }
+
+    Polynomial divide(pair<int, int> divisor)
+    {
+        pair<int, int> factor;
+        factor.first = divisor.second;
+        factor.second = divisor.first;
+        return multiply(factor);
     }
 };
 
