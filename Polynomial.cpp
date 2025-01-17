@@ -466,12 +466,48 @@ public:
             Polynomial quotient = dividend.divide(divisor);
             Polynomial remaind = dividend.remainder(divisor, quotient);
             if (remaind.getCoefficients().size() == 0)
-                return divisor.divide(divisor.getCoefficientAt(divisor.getCoefficients().size() -1));
+                return divisor.divide(divisor.getCoefficientAt(divisor.getCoefficients().size() - 1));
             dividend = divisor;
             divisor = remaind;
         }
     }
 
+    void printVietasFormulas()
+    {
+        int n = 4;
+        for (int i = 1; i <= 2; i++)
+        {
+            for (int j = 1; j <= n; j++)
+            {
+                for (int k = 1; k <= j; k++)
+                {
+                    for (int l = k + 1; l <= n; l++)
+                    {
+                    }
+                }
+            }
+            cout << endl;
+        }
+    }
+
+    Polynomial changeArgument(pair<int, int> addend)
+    {
+        int polynomialSize = coefficients.size();
+        vector<pair<int, int>> toBeReturnedCoefficients(polynomialSize);
+        toBeReturnedCoefficients[0] = coefficients[0];
+        replaceZeroDenominators(toBeReturnedCoefficients);
+        Polynomial toBeReturned(toBeReturnedCoefficients);
+        Polynomial multiplicator({{addend}, {1, 1}});
+        for (int i = 1; i < polynomialSize; i++)
+        {
+            Polynomial toBeAdded({{addend}, {1, 1}});
+            for (int j = 1; j < i; j++)
+                toBeAdded = toBeAdded.multiply(multiplicator);
+            toBeAdded.multiply(coefficients[i]);
+            toBeReturned = toBeReturned.add(toBeAdded);
+        }
+        return toBeReturned;
+    }
     void print()
     {
 
@@ -522,15 +558,18 @@ void startLoop()
 {
     cout << "give polynomial" << endl;
     Polynomial firstPolynomial = askForPolynomial();
-    Polynomial secondPolynomial = askForPolynomial();
+    // firstPolynomial.printVietasFormulas();
+    Polynomial ah = firstPolynomial.changeArgument({2, 1});
+    ah.print();
+    // Polynomial secondPolynomial = askForPolynomial();
     // Polynomial quotient = firstPolynomial.divide(secondPolynomial);
     // Polynomial remainder = firstPolynomial.remainder(secondPolynomial, quotient);
     // quotient.print();
     // remainder.print();
     // firstPolynomial.print();
     // secondPolynomial.print();
-    Polynomial gcd = firstPolynomial.findGCD(secondPolynomial);
-    gcd.print();
+    // Polynomial gcd = firstPolynomial.findGCD(secondPolynomial);
+    // gcd.print();
 
     // vector<pair<int, int>> roots = firstPolynomial.roots();
     // firstPolynomial.print();
