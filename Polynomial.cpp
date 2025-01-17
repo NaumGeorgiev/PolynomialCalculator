@@ -639,7 +639,8 @@ void startLoop()
             anotherPolinomial.print();
             Polynomial quotient = polinomial.divide(anotherPolinomial);
             cout << endl
-                 << "Quotient:" << endl << endl;
+                 << "Quotient:" << endl
+                 << endl;
             quotient.print();
             Polynomial remainde = polinomial.remainder(anotherPolinomial, quotient);
             cout << "remainder:" << endl;
@@ -678,22 +679,32 @@ void startLoop()
         }
         case 7:
         {
+            cout << "Type second polinomial's coefficients" << endl
+                 << endl;
             Polynomial anotherPolinomial = askForPolynomial();
             Polynomial gcd = polinomial.findGCD(anotherPolinomial);
+            cout << endl
+                 << "GCD:" << endl;
             gcd.print();
             break;
         }
         case 9:
         {
+            cout << "Type rational number" << endl
+                 << endl;
             Polynomial fractionContainer = askForPolynomial();
             pair<int, int> fraction = fractionContainer.getCoefficientAt(0);
             Polynomial withChangedArgument = polinomial.changeArgument(fraction);
+            cout << endl
+                 << "New polinomial:" << endl;
             withChangedArgument.print();
             break;
         }
         case 10:
         {
             vector<pair<int, int>> root = polinomial.roots();
+            cout << endl
+                 << "Decomposition:" << endl;
             polinomial.printDecomposition(root);
             break;
         }
