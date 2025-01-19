@@ -175,6 +175,10 @@ pair<int, int> divideFractions(pair<int, int> a, pair<int, int> b)
     pair<int, int> quotient;
     quotient.first = a.first * b.second;
     quotient.second = a.second * b.first;
+    if(quotient.second==0){
+        cout << "can't divide by zero, will replace it with one";
+        quotient.second=1;
+    }
     simplify(quotient);
     return quotient;
 }
@@ -227,6 +231,55 @@ void removeLastZeros(vector<pair<int, int>> &coefficients)
     for (int i = 0; i < cleanedCoefficients.size(); i++)
         cleanedCoefficients[i] = coefficients[i];
     coefficients = cleanedCoefficients;
+}
+
+void print(const vector<int> &prefix, const char symbol, const vector<pair<int, int>> &coefficients)
+{
+    for (int i = 0; i < prefix.size(); i++)
+        cout << prefix[i];
+    cout << ' ' << symbol << ' ';
+    if (symbol == '=')
+    {
+        pair<int, int> dividend = coefficients[coefficients.size() - 1 - prefix.size()];
+        pair<int, int> divisor = coefficients[coefficients.size() - 1];
+        pair<int, int> result = divideFractions(dividend, divisor);
+        bool positive = prefix.size() % 2 == 0;
+        if (!positive)
+            result.first *= -1;
+        cout << result.first << '/' << result.second;
+    }
+}
+
+bool consectutiveWithLastELementN(const vector<int> &prefix, const int n)
+{
+    if (prefix[prefix.size() - 1] != n)
+        return false;
+    for (int i = 1; i < prefix.size(); i++)
+    {
+        if (prefix[i] != prefix[i - 1] + 1)
+            return false;
+    }
+    return true;
+}
+
+void printVietaLine(vector<int> prefix, const int n, int m, const vector<pair<int, int>> &coefficients)
+{
+    int k = prefix[prefix.size() - 1];
+    for (int i = k + 1; i <= n; i++)
+    {
+        prefix.push_back(i);
+        if (prefix.size() == m)
+        {
+            char symbol;
+            if (consectutiveWithLastELementN(prefix, n))
+                symbol = '=';
+            else
+                symbol = '+';
+            print(prefix, symbol, coefficients);
+        }
+        printVietaLine(prefix, n, m, coefficients);
+        prefix.pop_back();
+    }
 }
 
 class Polynomial
@@ -347,42 +400,16 @@ public:
 
     void printDecomposition(const vector<pair<int, int>> &roots)
     {
-        // for (int i = 0; i < roots.size(); i++)
-        // {
-        //     const int numerator = roots[i].first;
-        //     const int denominator = roots[i].second;
-        //     if (numerator == 0)
-        //         cout << 'x';
-        //     else if (denominator == 1)
-        //         if (numerator < 0)
-        //             cout << "(x + " << numerator * (-1) << ')';
-        //         else
-        //             cout << "(x - " << numerator << ')';
-        //     else if (numerator < 0)
-        //         cout
-        //             << "(x + " << numerator * (-1) << '/' << denominator << ')';
-        //     else
-        //         cout << "(x - " << numerator << '/' << denominator << ')';
-        //     int degree = 1;
-        //     for (int j = i + 1; j < roots.size(); j++)
-        //         if (roots[j] == roots[i])
-        //             degree++;
-        //     if (degree > 1)
-        //     {
-        //         cout << '^' << degree;
-        //         i += degree - 1;
-        //     }
-        // }
         Polynomial dividend(coefficients);
         for (int i = 0; i < roots.size(); i++)
         {
             const int numerator = roots[i].first;
             const int denominator = roots[i].second;
-            Polynomial divisor({{numerator*(-1), denominator}, {1, 1}});
+            Polynomial divisor({{numerator * (-1), denominator}, {1, 1}});
             divisor.print();
             dividend = dividend.divide(divisor);
         }
-        if(dividend.getCoefficients().size()!=0)
+        if (dividend.getCoefficients().size() != 0)
             dividend.print();
     }
 
@@ -406,19 +433,16 @@ public:
         }
     }
 
-    void printVietasFormulas() // TODO the whole method
+    void printVieta()
     {
-        int n = 4;
-        for (int i = 1; i <= 2; i++)
+        int n = coefficients.size() - 1;
+        for (int i = 2; i <= n; i++)
         {
             for (int j = 1; j <= n; j++)
             {
-                for (int k = 1; k <= j; k++)
-                {
-                    for (int l = k + 1; l <= n; l++)
-                    {
-                    }
-                }
+                vector<int> prefix = {j};
+
+                printVietaLine(prefix, n, i, coefficients);
             }
             cout << endl;
         }
@@ -686,6 +710,11 @@ void startLoop()
             Polynomial gcd = polinomial.findGCD(anotherPolinomial);
             cout << "GCD:" << endl;
             gcd.print();
+            break;
+        }
+        case 8:
+        {
+            polinomial.printVieta();
             break;
         }
         case 9:
