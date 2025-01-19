@@ -1,3 +1,18 @@
+/*Solution to course project #4
+Introduction to programming course
+Faculty of Mathematics and Informatics of Sofia University
+Winter semester 2024/2025
+
+@author Naum Georgiev
+@idnumber 0600526
+@compiler GCC
+first 300 lines are helper methods
+from 300 to 600 is the Polynomial class and its own methods
+the rest is the loop
+
+my github page: https://github.com/NaumGeorgiev/PolynomialCalculator
+*/
+
 #include <vector>
 #include <cmath>
 #include <utility>
