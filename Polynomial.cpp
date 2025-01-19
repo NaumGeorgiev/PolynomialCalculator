@@ -175,9 +175,10 @@ pair<int, int> divideFractions(pair<int, int> a, pair<int, int> b)
     pair<int, int> quotient;
     quotient.first = a.first * b.second;
     quotient.second = a.second * b.first;
-    if(quotient.second==0){
+    if (quotient.second == 0)
+    {
         cout << "can't divide by zero, will replace it with one";
-        quotient.second=1;
+        quotient.second = 1;
     }
     simplify(quotient);
     return quotient;
@@ -236,7 +237,7 @@ void removeLastZeros(vector<pair<int, int>> &coefficients)
 void print(const vector<int> &prefix, const char symbol, const vector<pair<int, int>> &coefficients)
 {
     for (int i = 0; i < prefix.size(); i++)
-        cout << prefix[i];
+        cout << 'x' << prefix[i];
     cout << ' ' << symbol << ' ';
     if (symbol == '=')
     {
@@ -246,7 +247,10 @@ void print(const vector<int> &prefix, const char symbol, const vector<pair<int, 
         bool positive = prefix.size() % 2 == 0;
         if (!positive)
             result.first *= -1;
-        cout << result.first << '/' << result.second;
+        if (result.second == 1 || result.first == 0)
+            cout << result.first;
+        else
+            cout << result.first << '/' << result.second;
     }
 }
 
@@ -436,6 +440,24 @@ public:
     void printVieta()
     {
         int n = coefficients.size() - 1;
+        for (int i = 1; i <= n; i++)
+        {
+            if (i == n)
+            {
+                cout << 'x' << i << " = ";
+                pair<int, int> dividend = coefficients[coefficients.size() - 2];
+                pair<int, int> divisor = coefficients[coefficients.size() - 1];
+                pair<int, int> result = divideFractions(dividend, divisor);
+                result.first *= -1;
+                if (result.second == 1 || result.first == 0)
+                    cout << result.first;
+                else
+                    cout << result.first << '/' << result.second;
+            }
+            else
+                cout << 'x' << i << " + ";
+        }
+        cout << endl;
         for (int i = 2; i <= n; i++)
         {
             for (int j = 1; j <= n; j++)
