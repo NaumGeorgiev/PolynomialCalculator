@@ -286,7 +286,8 @@ public:
             return Polynomial({{0, 1}});
         }
         vector<pair<int, int>> quotient(quotientSize);
-
+        for (int i = 0; i < quotientSize; i++)
+            quotient[i].second = 1;
         for (int i = 0; i < quotientSize; i++)
         {
             quotient[quotientSize - 1 - i] = divideFractions(dividendCoefficients[dividendSize - 1], divisorCoefficients[divisorSize - 1]);
@@ -297,7 +298,8 @@ public:
             Polynomial tempPolynomial(tempCoefficients);
             dividend = dividend.subtract(tempPolynomial);
             dividendCoefficients = dividend.getCoefficients();
-            dividend.removedLastZeros();
+            // dividend.removedLastZeros();
+            i += dividendSize - dividendCoefficients.size() - 1;
             dividendSize = dividendCoefficients.size();
             if (dividendSize < divisorSize)
                 return Polynomial(quotient).removedLastZeros();
@@ -371,6 +373,13 @@ public:
                 cout << '^' << degree;
                 i += degree - 1;
             }
+        }
+        Polynomial remainder({});
+        for (int i = 0; i < roots.size(); i++)
+        {
+            const int numerator = roots[i].first;
+            const int denominator = roots[i].second;
+
         }
     }
 
