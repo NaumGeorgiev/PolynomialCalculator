@@ -298,7 +298,6 @@ public:
             Polynomial tempPolynomial(tempCoefficients);
             dividend = dividend.subtract(tempPolynomial);
             dividendCoefficients = dividend.getCoefficients();
-            // dividend.removedLastZeros();
             i += dividendSize - dividendCoefficients.size() - 1;
             dividendSize = dividendCoefficients.size();
             if (dividendSize < divisorSize)
@@ -348,39 +347,43 @@ public:
 
     void printDecomposition(const vector<pair<int, int>> &roots)
     {
+        // for (int i = 0; i < roots.size(); i++)
+        // {
+        //     const int numerator = roots[i].first;
+        //     const int denominator = roots[i].second;
+        //     if (numerator == 0)
+        //         cout << 'x';
+        //     else if (denominator == 1)
+        //         if (numerator < 0)
+        //             cout << "(x + " << numerator * (-1) << ')';
+        //         else
+        //             cout << "(x - " << numerator << ')';
+        //     else if (numerator < 0)
+        //         cout
+        //             << "(x + " << numerator * (-1) << '/' << denominator << ')';
+        //     else
+        //         cout << "(x - " << numerator << '/' << denominator << ')';
+        //     int degree = 1;
+        //     for (int j = i + 1; j < roots.size(); j++)
+        //         if (roots[j] == roots[i])
+        //             degree++;
+        //     if (degree > 1)
+        //     {
+        //         cout << '^' << degree;
+        //         i += degree - 1;
+        //     }
+        // }
+        Polynomial dividend(coefficients);
         for (int i = 0; i < roots.size(); i++)
         {
             const int numerator = roots[i].first;
             const int denominator = roots[i].second;
-            if (numerator == 0)
-                cout << 'x';
-            else if (denominator == 1)
-                if (numerator < 0)
-                    cout << "(x + " << numerator * (-1) << ')';
-                else
-                    cout << "(x - " << numerator << ')';
-            else if (numerator < 0)
-                cout
-                    << "(x + " << numerator * (-1) << '/' << denominator << ')';
-            else
-                cout << "(x - " << numerator << '/' << denominator << ')';
-            int degree = 1;
-            for (int j = i + 1; j < roots.size(); j++)
-                if (roots[j] == roots[i])
-                    degree++;
-            if (degree > 1)
-            {
-                cout << '^' << degree;
-                i += degree - 1;
-            }
+            Polynomial divisor({{numerator*(-1), denominator}, {1, 1}});
+            divisor.print();
+            dividend = dividend.divide(divisor);
         }
-        Polynomial remainder({});
-        for (int i = 0; i < roots.size(); i++)
-        {
-            const int numerator = roots[i].first;
-            const int denominator = roots[i].second;
-
-        }
+        if(dividend.getCoefficients().size()!=0)
+            dividend.print();
     }
 
     Polynomial findGCD(Polynomial divisor)
